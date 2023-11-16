@@ -7,6 +7,7 @@ from requests.exceptions import RequestException
 import config
 from api import get_jql_query_results
 from issue_box import IssueBox
+from jira_connection_settings_popup import open_settings_popup
 
 
 class JiraIssueTracker(GridLayout):
@@ -68,7 +69,8 @@ class JiraIssueTracker(GridLayout):
     def update_labels(self, dt):
         for box in self.boxes:
             try:
-                count = get_jql_query_results(self.jira_base_url, box.jql_query)
+                count = get_jql_query_results(box.jql_query)  # Only pass the JQL query
                 box.update_label(count)
             except RequestException:
                 box.update_label("Error fetching data")
+

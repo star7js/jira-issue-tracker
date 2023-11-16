@@ -48,3 +48,11 @@ class JiraConnectionSettingsPopup(Popup):
             pass
 
         App.get_running_app().stop()
+
+
+def open_settings_popup(instance):
+    """
+    Open the settings popup.
+    """
+    popup = JiraConnectionSettingsPopup()
+    popup.open()
