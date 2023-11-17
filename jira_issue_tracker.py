@@ -5,7 +5,6 @@ from requests.exceptions import RequestException
 from kivymd.uix.button import MDRaisedButton
 from kivymd.app import MDApp
 
-
 import config
 from api import get_jql_query_results
 from issue_box import IssueBox

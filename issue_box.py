@@ -4,6 +4,7 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.card import MDCard
 from kivymd.app import MDApp
 
+
 class IssueBox(MDCard):
     def __init__(self, title, jql_query, jira_base_url, **kwargs):
         super().__init__(**kwargs)
