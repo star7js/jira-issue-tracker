@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# Default interval for API requests in seconds
+DEFAULT_API_REQUEST_INTERVAL = 60 * 60  # 1 hour
+
 # Global constants
 JIRA_SITE_URL = os.getenv('JIRA_SITE_URL')
 JIRA_API_KEY = os.getenv('JIRA_API_KEY')

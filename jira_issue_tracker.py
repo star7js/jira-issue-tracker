@@ -1,8 +1,10 @@
 from dotenv import get_key
 from kivy.clock import Clock
-from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from requests.exceptions import RequestException
+from kivymd.uix.button import MDRaisedButton
+from kivymd.app import MDApp
+
 
 import config
 from api import get_jql_query_results
@@ -47,22 +49,32 @@ class JiraIssueTracker(GridLayout):
         self.create_user_settings_button()
 
     def create_mode_toggle_button(self):
-        self.mode_button = Button(text="Toggle Light/Dark Mode", size_hint_y=None, height=50)
+        self.mode_button = MDRaisedButton(
+            text="Toggle Light/Dark Mode",
+            size_hint_y=None,
+            height=50,
+            pos_hint={'center_x': 0.5}
+        )
         self.mode_button.bind(on_press=self.toggle_mode)
         self.add_widget(self.mode_button)
 
     def create_user_settings_button(self):
-        self.mode_button = Button(text="User Settings", size_hint_y=None, height=50)
-        self.mode_button.bind(on_press=open_settings_popup)
-        self.add_widget(self.mode_button)
+        self.user_settings_button = MDRaisedButton(
+            text="User Settings",
+            size_hint_y=None,
+            height=50,
+            pos_hint={'center_x': 0.5}
+        )
+        self.user_settings_button.bind(on_press=open_settings_popup)
+        self.add_widget(self.user_settings_button)
 
     def toggle_mode(self, instance):
-        self.dark_mode = not self.dark_mode
-        for box in self.boxes:
-            box.update_ui_colors(self.dark_mode)
+        app = MDApp.get_running_app()
+        app.theme_cls.theme_style = 'Dark' if app.theme_cls.theme_style == 'Light' else 'Light'
 
     def create_issue_boxes(self):
-        self.boxes = [IssueBox(title, query, self.jira_base_url, self.dark_mode) for title, query in self.JQL_QUERIES]
+        # In jira_issue_tracker.py, within the create_issue_boxes method
+        self.boxes = [IssueBox(title, query, self.jira_base_url) for title, query in self.JQL_QUERIES]
         for box in self.boxes:
             self.add_widget(box)
 
@@ -73,4 +85,3 @@ class JiraIssueTracker(GridLayout):
                 box.update_label(count)
             except RequestException:
                 box.update_label("Error fetching data")
-

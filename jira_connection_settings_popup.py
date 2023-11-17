@@ -1,39 +1,53 @@
 from dotenv import set_key
-from kivy.app import App
-from kivy.core.window import Window
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.popup import Popup
-from kivy.uix.textinput import TextInput
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.textfield import MDTextField
+from kivymd.uix.dialog import MDDialog
+from kivymd.app import MDApp
 
 
-class JiraConnectionSettingsPopup(Popup):
-    """
-    Popup for Jira Connection Settings.
-    """
-
+class JiraConnectionSettingsPopup(MDDialog):
     def __init__(self, **kwargs):
-        super(JiraConnectionSettingsPopup, self).__init__(**kwargs)
-        self.title = "Jira Connection Settings"
+        self.jira_site_url = MDTextField(
+            hint_text="Jira Site URL",
+            size_hint_y=None,  # Allow for a fixed height
+            height="48dp",  # Specify the height of the text field
+            multiline=False  # Ensure it's a single line if that's what you want
+        )
+        self.jira_api_key = MDTextField(
+            hint_text="Jira Personal Access Token",
+            size_hint_y=None,  # Allow for a fixed height
+            height="48dp",  # Specify the height of the text field
+            multiline=False
+        )
 
-        save_button = Button(text="Save and Close Program", on_press=self.save_settings)
-        close_without_save_button = Button(text="Close without Saving", on_press=self.dismiss)
-        layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        # Adjust padding and spacing for better layout
+        content = MDBoxLayout(orientation='vertical', padding=[10, 20, 10, 20], spacing=15)
+        content.add_widget(self.jira_site_url)
+        content.add_widget(self.jira_api_key)
 
-        self.jira_site_url = TextInput(hint_text="Jira Site URL\n ()")
-        self.jira_api_key = TextInput(hint_text="Jira Personal Access Token", multiline=False)
+        save_button = MDRaisedButton(
+            text="Save and Close Program",
+            on_release=self.save_settings
+        )
+        close_without_save_button = MDRaisedButton(
+            text="Close without Saving",
+            on_release=lambda x: self.dismiss()
+        )
 
-        layout.add_widget(self.jira_site_url)
-        layout.add_widget(self.jira_api_key)
-        layout.add_widget(save_button)
-        layout.add_widget(close_without_save_button)
+        # Adjust the size_hint for more space
+        super().__init__(
+            type="custom",
+            content_cls=content,
+            buttons=[save_button, close_without_save_button],
+            size_hint=(0.9, 0.5),
+        )
 
-        self.content = layout
+        # Set the height for MDTextFields to None to allow for auto-sizing
+        self.jira_site_url.height = '30dp'
+        self.jira_api_key.height = '30dp'
 
     def save_settings(self, instance):
-        """
-        Save the settings to the .env file and close the application.
-        """
         jira_api_key = self.jira_api_key.text.strip()
         jira_site_url = self.jira_site_url.text.rstrip("/")
 
@@ -42,17 +56,14 @@ class JiraConnectionSettingsPopup(Popup):
                 set_key('.env', 'JIRA_API_KEY', jira_api_key)
             if jira_site_url:
                 set_key('.env', 'JIRA_SITE_URL', jira_site_url)
-            # Consider adding user feedback here, e.g., a confirmation popup.
+            self.dismiss()
+            MDApp.get_running_app().stop()
         except Exception as e:
-            # Handle exceptions, potentially logging them or notifying the user.
-            pass
-
-        App.get_running_app().stop()
+            # Handle exceptions, potentially logging them or notifying the user
+            print(e)
+            self.dismiss()
 
 
 def open_settings_popup(instance):
-    """
-    Open the settings popup.
-    """
     popup = JiraConnectionSettingsPopup()
     popup.open()
