@@ -67,7 +67,7 @@ class IssueBox(MDCard):
         """Updates the issue count label."""
         self.issue_label.text = str(count)
 
-    def update_ui_colors(self):
-        """Updates the background color based on the current mode (dark/light)."""
+    # Inside IssueBox class
+    def update_ui_colors(self, theme_style):
         app = MDApp.get_running_app()
-        self.md_bg_color = app.theme_cls.bg_dark if app.theme_cls.theme_style == 'Dark' else app.theme_cls.bg_light
+        self.md_bg_color = app.theme_cls.bg_dark if theme_style == 'Dark' else app.theme_cls.bg_light

@@ -67,7 +67,10 @@ class JiraIssueTracker(GridLayout):
 
     def toggle_mode(self, instance):
         app = MDApp.get_running_app()
-        app.theme_cls.theme_style = 'Dark' if app.theme_cls.theme_style == 'Light' else 'Light'
+        new_theme_style = 'Dark' if app.theme_cls.theme_style == 'Light' else 'Light'
+        app.theme_cls.theme_style = new_theme_style
+        for box in self.boxes:
+            box.update_ui_colors(new_theme_style)  # Pass the new_theme_style variable, not the property
 
     def create_issue_boxes(self):
         # In jira_issue_tracker.py, within the create_issue_boxes method

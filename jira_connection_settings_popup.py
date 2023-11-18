@@ -14,6 +14,7 @@ class JiraConnectionSettingsPopup(MDDialog):
             height="48dp",  # Minimum height
             multiline=False
         )
+
         self.jira_api_key = MDTextField(
             hint_text="Jira Personal Access Token",
             size_hint=(1, None),  # Occupy the full width of the layout, height is None
@@ -43,7 +44,6 @@ class JiraConnectionSettingsPopup(MDDialog):
 
         # Adjust the size_hint for more space
         super().__init__(
-            title="Jira Connection Settings",
             type="custom",
             content_cls=content,
             buttons=[save_button, close_without_save_button],
