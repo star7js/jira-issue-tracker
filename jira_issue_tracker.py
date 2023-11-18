@@ -12,12 +12,10 @@ from jira_connection_settings_popup import open_settings_popup
 
 
 class JiraIssueTracker(GridLayout):
-    # TODO: Fix Service Management Projects, is it JSON differences or is it user roleS?
-    # TODO: Let the user select JQL Queries
-    # TODO: Click to visit hint on the JQL box
-    # TODO: Changes to the appearance of the box if desired
-    # TODO: Complicated filters might need to be referenced by their number,
-    # or else we need to format the data (regex to change "" to '', others?)
+    # TODO: Fix Service Management Projects, is it JSON differences or is it user roleS? TODO: Let the user select
+    #  TODO: Click to visit hint on the JQL box TODO: Changes to the appearance of the box if desired
+    #   TODO: Complicated filters might need to be referenced by their number, or else we need to format the data (
+    #    regex to change "" to '', others?)
 
     JQL_QUERIES = [
         ("One", "assignee = currentUser()"),
