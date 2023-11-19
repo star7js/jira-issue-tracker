@@ -3,6 +3,11 @@ import webbrowser
 from kivymd.uix.label import MDLabel
 from kivymd.uix.card import MDCard
 from kivymd.app import MDApp
+from kivy.utils import get_color_from_hex
+
+# Define your text colors for dark and light themes
+LIGHT_TEXT_COLOR = get_color_from_hex('ffffff')  # White text for dark backgrounds
+DARK_TEXT_COLOR = get_color_from_hex('000000')  # Black text for light backgrounds
 
 
 class IssueBox(MDCard):
@@ -70,4 +75,14 @@ class IssueBox(MDCard):
     # Inside IssueBox class
     def update_ui_colors(self, theme_style):
         app = MDApp.get_running_app()
-        self.md_bg_color = app.theme_cls.bg_dark if theme_style == 'Dark' else app.theme_cls.bg_light
+        if theme_style == 'Dark':
+            self.md_bg_color = app.theme_cls.bg_dark
+            text_color = LIGHT_TEXT_COLOR
+        else:
+            self.md_bg_color = app.theme_cls.bg_light
+            text_color = DARK_TEXT_COLOR
+
+        # Update the text color of all the labels
+        self.issue_label.color = text_color
+        self.title_label.color = text_color
+        self.jql_label.color = text_color
