@@ -13,7 +13,7 @@ class JiraTrackerApp(MDApp):  # Changed from App to MDApp
 
     def build(self):
         # Set the window size (overall size of the program)
-        Window.size = (400, 400)  # Set your desired window size
+        Window.size = (420, 335)  # Set your desired window size
         # Set the theme colors
         self.theme_cls.primary_palette = 'DeepPurple'
         self.theme_cls.accent_palette = 'Teal'

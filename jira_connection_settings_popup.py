@@ -1,36 +1,64 @@
-from dotenv import set_key
+from dotenv import load_dotenv, set_key, find_dotenv
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.dialog import MDDialog
 from kivymd.app import MDApp
+from kivymd.uix.label import MDLabel
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
+import os
 
 
 class JiraConnectionSettingsPopup(MDDialog):
     def __init__(self, **kwargs):
+        # Load environment variables from .env file
+        load_dotenv(find_dotenv())
+
+        # Get current values from .env, if they exist
+        current_jira_site_url = os.getenv('JIRA_SITE_URL', 'Jira Site URL')
+        current_jira_api_key = os.getenv('JIRA_API_KEY', 'Jira Personal Access Token')
+
+        # Create labels
+        jira_site_url_label = MDLabel(
+            text="Jira Site URL",
+            halign="center",
+            size_hint_y=None,
+            height="20dp"
+        )
+
+        jira_api_key_label = MDLabel(
+            text="Jira Personal Access Token",
+            halign="center",
+            size_hint_y=None,
+            height="20dp"
+        )
+
         self.jira_site_url = MDTextField(
-            hint_text="Jira Site URL",
-            size_hint=(1, None),  # Occupy the full width of the layout, height is None
-            height="48dp",  # Minimum height
+            hint_text=current_jira_site_url,
+            size_hint=(1, None),
+            height="48dp",
             multiline=False
         )
 
         self.jira_api_key = MDTextField(
-            hint_text="Jira Personal Access Token",
-            size_hint=(1, None),  # Occupy the full width of the layout, height is None
-            height="48dp",  # Minimum height
+            hint_text=current_jira_api_key,
+            size_hint=(1, None),
+            height="48dp",
             multiline=False
         )
 
+        # MDBoxLayout for content
         content = MDBoxLayout(
             orientation='vertical',
             padding=[10, 20, 10, 20],
             spacing=15,
-            size_hint_y=None,  # Disable height scaling relative to the parent
-            height="150dp"  # Set a fixed height of 300dp for the content box
+            size_hint_y=None,
+            height="200dp"  # Adjusted height to accommodate labels
         )
 
+        # Add widgets to the layout
+        content.add_widget(jira_site_url_label)
         content.add_widget(self.jira_site_url)
+        content.add_widget(jira_api_key_label)
         content.add_widget(self.jira_api_key)
 
         save_button = MDRaisedButton(
