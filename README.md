@@ -32,12 +32,11 @@ To run the program:
 python main.py
 ```
 
+
+## Configuration
+
 Make sure you have set up the .env file with your JIRA site URL and API key.
 If you don't have this set, the program will ask you for it before it will run.
 The variables you enter will be saved in a .env file in the same directory as the main.py file.
 If you want to change these variables, you can either edit the .env file directly, or you can choose
 'Jira Settings' button in the program.
-
-## Configuration
-
-Customize your queries by editing the api.py file with your specific JQL queries.
