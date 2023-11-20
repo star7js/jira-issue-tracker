@@ -66,7 +66,7 @@ class JiraIssueTracker(GridLayout):
     def create_mode_toggle_button(self):
         self.mode_button = MDRaisedButton(
             text="Toggle Light/Dark Mode",
-            size_hint_y=None,
+            size_hint=(.5, None),
             height=50,
             pos_hint={'center_x': 0.5}
         )
@@ -76,7 +76,7 @@ class JiraIssueTracker(GridLayout):
     def create_user_settings_button(self):
         self.user_settings_button = MDRaisedButton(
             text="User Settings",
-            size_hint_y=None,
+            size_hint=(.5, None),
             height=50,
             pos_hint={'center_x': 0.5}
         )

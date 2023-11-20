@@ -1,5 +1,6 @@
 import kivy
 from dotenv import get_key
+from kivy.core.window import Window
 from kivymd.app import MDApp
 
 from jira_connection_settings_popup import JiraConnectionSettingsPopup
@@ -11,6 +12,8 @@ kivy.require('2.1.0')
 class JiraTrackerApp(MDApp):  # Changed from App to MDApp
 
     def build(self):
+        # Set the window size (overall size of the program)
+        Window.size = (400, 400)  # Set your desired window size
         # Set the theme colors
         self.theme_cls.primary_palette = 'DeepPurple'
         self.theme_cls.accent_palette = 'Teal'

@@ -28,27 +28,28 @@ class IssueBox(MDCard):
     def setup_ui(self):
         """Initializes the user interface for the issue box."""
         self.size_hint = (0.5, None)  # Use half the width of the parent
-        self.height = "150dp"  # Set a height that allows for padding and readability
+        self.height = "140dp"  # Set a height that allows for padding and readability
         self.padding = "8dp"  # Add some padding inside the card
+        self.orientation = "vertical"
         self.create_labels()
 
     def create_labels(self):
         """Creates and adds labels to the issue box."""
-        self.issue_label = MDLabel(
-            text="Fetching data...",
-            font_style="Body1",
-            halign="center",
-            theme_text_color="Secondary",
-            size_hint_y=None,
-            height="48dp",
-        )
         self.title_label = MDLabel(
             text=self.title,
             font_style="Subtitle1",
             halign="center",
             theme_text_color="Primary",
             size_hint_y=None,
-            height="36dp",
+            height="48dp",
+        )
+        self.issue_label = MDLabel(
+            text="Fetching data...",
+            font_style="H6",
+            halign="center",
+            theme_text_color="Secondary",
+            size_hint_y=None,
+            height="48dp",
         )
         # Adjust label height dynamically based on query length
         query_lines = self.jql_query.count('\n') + 1
