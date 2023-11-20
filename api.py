@@ -14,6 +14,20 @@ JIRA_SITE_URL = os.getenv('JIRA_SITE_URL')
 JIRA_API_KEY = os.getenv('JIRA_API_KEY')
 JIRA_API_ENDPOINT = "/rest/api/latest/search"
 
+# JQL Queries
+if os.getenv('JQL_QUERY_ONE'):
+    JQL_QUERY_ONE = os.getenv('JQL_QUERY_ONE')
+if os.getenv('JQL_QUERY_TWO'):
+    JQL_QUERY_TWO = os.getenv('JQL_QUERY_TWO')
+if os.getenv('JQL_QUERY_THREE'):
+    JQL_QUERY_THREE = os.getenv('JQL_QUERY_THREE')
+if os.getenv('JQL_QUERY_FOUR'):
+    JQL_QUERY_FOUR = os.getenv('JQL_QUERY_FOUR')
+if os.getenv('JQL_QUERY_FIVE'):
+    JQL_QUERY_FIVE = os.getenv('JQL_QUERY_FIVE')
+if os.getenv('JQL_QUERY_SIX'):
+    JQL_QUERY_SIX = os.getenv('JQL_QUERY_SIX')
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 

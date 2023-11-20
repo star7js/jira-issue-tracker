@@ -48,13 +48,16 @@ class IssueBox(MDCard):
             size_hint_y=None,
             height="36dp",
         )
+        # Adjust label height dynamically based on query length
+        query_lines = self.jql_query.count('\n') + 1
+        label_height = max(24, query_lines * 24)  # Adjust 24dp per line
         self.jql_label = MDLabel(
             text=self.jql_query,
             font_style="Caption",
             halign="center",
             theme_text_color="Hint",
             size_hint_y=None,
-            height="24dp",
+            height=f"{label_height}dp",
         )
         self.jql_label.bind(on_touch_down=self.on_jql_label_click)
         self.add_widget(self.title_label)

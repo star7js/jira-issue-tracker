@@ -17,7 +17,7 @@ class JiraTrackerApp(MDApp):  # Changed from App to MDApp
         self.theme_cls.primary_hue = '500'
         self.theme_cls.accent_hue = '200'
         # You can switch the 'Light' to 'Dark' based on user preference or a setting
-        self.theme_cls.theme_style = 'Light'
+        self.theme_cls.theme_style = 'Dark'
 
         # if there are not environment variables set in a .env file, then we need the user to put them in
         if not (get_key('.env', 'JIRA_API_KEY') and get_key('.env', 'JIRA_SITE_URL')):

@@ -5,8 +5,9 @@ from requests.exceptions import RequestException
 from kivymd.uix.button import MDRaisedButton
 from kivymd.app import MDApp
 
-import config
-from api import get_jql_query_results
+from api import (get_jql_query_results, DEFAULT_API_REQUEST_INTERVAL,
+                 JQL_QUERY_ONE, JQL_QUERY_TWO, JQL_QUERY_THREE,
+                 JQL_QUERY_FOUR)
 from issue_box import IssueBox
 from jira_connection_settings_popup import open_settings_popup
 
@@ -17,19 +18,44 @@ class JiraIssueTracker(GridLayout):
     #   TODO: Complicated filters might need to be referenced by their number, or else we need to format the data (
     #    regex to change "" to '', others?)
 
-    JQL_QUERIES = [
-        ("One", "assignee = currentUser()"),
-        ("Two", "updated >= -1d order by updated DESC"),
-        ("Three", "project = DEV and updated >= -14d"),
-        ("Four", "project = SABR")
-    ]
-
     jira_site_url = get_key('.env', 'JIRA_SITE_URL')
     jira_base_url = f"{jira_site_url}/issues/"
 
+    def load_queries_from_config(self):
+        # TODO: Implement loading JQL queries from a user's input or a configuration file
+        pass
+
+    def update_ui_for_theme(self, theme_style):
+        # TODO: Implement UI updates when toggling themes
+        pass
+
+    def create_issue_box(self, title, query):
+        box = IssueBox(title, query, self.jira_base_url)
+        self.add_widget(box)
+        self.boxes.append(box)
+
+    def create_issue_boxes(self):
+        # Create a dictionary of query titles and their respective JQL queries
+        jql_queries = {
+            "Query One": JQL_QUERY_ONE,
+            "Query Two": JQL_QUERY_TWO,
+            "Query Three": JQL_QUERY_THREE,
+            "Query Four": JQL_QUERY_FOUR,
+        }
+
+        # Iterate through the dictionary and create a box for each non-empty query
+        for title, query in jql_queries.items():
+            if query:  # Only create a box if the query is defined (not None or empty)
+                self.create_issue_box(title, query)
+
+    def toggle_mode(self, instance):
+        app = MDApp.get_running_app()
+        app.theme_cls.theme_style = 'Dark' if app.theme_cls.theme_style == 'Light' else 'Light'
+        self.update_ui_for_theme(app.theme_cls.theme_style)
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.boxes = None
+        self.boxes = []  # Initialize self.boxes as an empty list
         self.mode_button = None
         self.jira_base_url = self.jira_base_url
         self.dark_mode = True
@@ -40,7 +66,7 @@ class JiraIssueTracker(GridLayout):
         self.spacing = 10
         self.padding = 10
         self.create_issue_boxes()
-        Clock.schedule_interval(self.update_labels, config.SIXTY_MINUTES)
+        Clock.schedule_interval(self.update_labels, DEFAULT_API_REQUEST_INTERVAL)
         self.update_labels(0)
         self.create_mode_toggle_button()
         self.create_user_settings_button()
@@ -71,12 +97,6 @@ class JiraIssueTracker(GridLayout):
         app.theme_cls.theme_style = new_theme_style
         for box in self.boxes:
             box.update_ui_colors(new_theme_style)  # Pass the new_theme_style variable, not the property
-
-    def create_issue_boxes(self):
-        # In jira_issue_tracker.py, within the create_issue_boxes method
-        self.boxes = [IssueBox(title, query, self.jira_base_url) for title, query in self.JQL_QUERIES]
-        for box in self.boxes:
-            self.add_widget(box)
 
     def update_labels(self, dt):
         for box in self.boxes:
