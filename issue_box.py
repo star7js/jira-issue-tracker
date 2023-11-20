@@ -16,7 +16,9 @@ class IssueBox(MDCard):
         self.title = title
         self.jql_query = jql_query
         self.jira_base_url = jira_base_url
-
+        self.focus_behavior = True
+        self.ripple_behavior = True
+        self.elevation = True
         self.jql_label = None
         self.title_label = None
         self.issue_label = None

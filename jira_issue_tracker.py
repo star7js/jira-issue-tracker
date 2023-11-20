@@ -21,14 +21,6 @@ class JiraIssueTracker(GridLayout):
     jira_site_url = get_key('.env', 'JIRA_SITE_URL')
     jira_base_url = f"{jira_site_url}/issues/"
 
-    def load_queries_from_config(self):
-        # TODO: Implement loading JQL queries from a user's input or a configuration file
-        pass
-
-    def update_ui_for_theme(self, theme_style):
-        # TODO: Implement UI updates when toggling themes
-        pass
-
     def create_issue_box(self, title, query):
         box = IssueBox(title, query, self.jira_base_url)
         self.add_widget(box)
@@ -40,7 +32,7 @@ class JiraIssueTracker(GridLayout):
             "Query One": JQL_QUERY_ONE,
             "Query Two": JQL_QUERY_TWO,
             "Query Three": JQL_QUERY_THREE,
-            "Query Four": JQL_QUERY_FOUR,
+            "Query Four": JQL_QUERY_FOUR
         }
 
         # Iterate through the dictionary and create a box for each non-empty query
