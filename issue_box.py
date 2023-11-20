@@ -28,7 +28,7 @@ class IssueBox(MDCard):
     def setup_ui(self):
         """Initializes the user interface for the issue box."""
         self.size_hint = (0.5, None)  # Use half the width of the parent
-        self.height = "240dp"  # Set a height that allows for padding and readability
+        self.height = "150dp"  # Set a height that allows for padding and readability
         self.padding = "8dp"  # Add some padding inside the card
         self.create_labels()
 
