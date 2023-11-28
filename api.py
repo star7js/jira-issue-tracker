@@ -2,6 +2,7 @@ import os
 import requests
 import logging
 from dotenv import load_dotenv
+from security import safe_requests
 
 # Load environment variables
 load_dotenv()
@@ -45,7 +46,7 @@ def create_request_headers():
 def execute_request(url, headers, query_params):
     """Execute the request and return the response."""
     try:
-        response = requests.get(url, headers=headers, params=query_params, timeout=10)
+        response = safe_requests.get(url, headers=headers, params=query_params, timeout=10)
         response.raise_for_status()
         return response.json()
     except requests.RequestException as error:
