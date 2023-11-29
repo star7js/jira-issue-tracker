@@ -37,7 +37,7 @@ python main.py
 
 ## Configuration
 
-Make sure you have set up the .env file with your JIRA site URL and API token.
+Make sure you have set up the .env file with your JIRA site URL and API token, and desired JQL Queries.  Create a new .env file, and use example.env as a guide.
 If you don't have this set, the program will ask you for it before it will run.
 The variables you enter will be saved in a .env file in the same directory as the main.py file.
 If you want to change these variables, you can either edit the .env file directly, or you can choose
