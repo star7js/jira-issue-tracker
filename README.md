@@ -17,6 +17,7 @@ To set up JiraTracker, you will need Python and the following libraries:
 - Kivy
 - KivyMD
 - Requests
+- python-dotenv
 
 Install the dependencies with:
 
