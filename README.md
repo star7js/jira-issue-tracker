@@ -1,6 +1,6 @@
-# JiraTracker
+# Jira Issue Tracker
 
-JiraTracker is a Kivy-based application designed to provide an overview of JIRA issues based on custom JQL (JIRA Query
+Jira Issue Tracker is a Kivy-based application designed to provide an overview of JIRA issues based on custom JQL (JIRA Query
 Language) queries. It offers a simple and intuitive interface to track the status of various issues and tasks.
 
 ## Features
@@ -12,7 +12,7 @@ Language) queries. It offers a simple and intuitive interface to track the statu
 
 ## Installation
 
-To set up JiraTracker, you will need Python and the following libraries:
+To set up Jira Issue Tracker, you will need Python and the following libraries:
 
 - Kivy
 - KivyMD
