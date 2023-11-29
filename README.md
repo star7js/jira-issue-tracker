@@ -30,4 +30,4 @@ Create a new `.env` using `example.env` as a guide.
 If you don't have this set, the program will ask you for it before it will run.
 This file will need to be saved in the same directory as the `main.py` file.
 If you want to change these variables, you can either edit the `.env` file directly, or you can choose
-'Jira Settings' button in the program.
+'User Settings' button in the program.
