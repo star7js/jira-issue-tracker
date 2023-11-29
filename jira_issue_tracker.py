@@ -26,19 +26,36 @@ class JiraIssueTracker(GridLayout):
         self.add_widget(box)
         self.boxes.append(box)
 
+    def create_empty_box(self):
+        empty_box = IssueBox(title="", jql_query="", jira_base_url=self.jira_base_url)
+        empty_box.disabled = True  # Optionally disable interaction
+        self.add_widget(empty_box)
+
     def create_issue_boxes(self):
-        # Create a dictionary of query titles and their respective JQL queries
+        # Dictionary of query titles and their respective JQL queries
         jql_queries = {
             "Query One": JQL_QUERY_ONE,
             "Query Two": JQL_QUERY_TWO,
             "Query Three": JQL_QUERY_THREE,
-            "Query Four": JQL_QUERY_FOUR
+            "Query Four": JQL_QUERY_FOUR,
+            # "Query Five": JQL_QUERY_FIVE,
+            # "Query Six": JQL_QUERY_SIX
         }
 
-        # Iterate through the dictionary and create a box for each non-empty query
-        for title, query in jql_queries.items():
-            if query:  # Only create a box if the query is defined (not None or empty)
-                self.create_issue_box(title, query)
+        # Filter out empty queries and count them
+        active_queries = {k: v for k, v in jql_queries.items() if v}
+        query_count = len(active_queries)
+
+        # Decide on the number of columns based on the number of active queries
+        self.cols = 2 if query_count > 1 else 1
+
+        # Create a box for each active query
+        for title, query in active_queries.items():
+            self.create_issue_box(title, query)
+
+        # If the number of queries is less than four, fill in the empty spaces
+        # for _ in range(6 - query_count):
+        # self.create_empty_box()
 
     def toggle_mode(self, instance):
         app = MDApp.get_running_app()
