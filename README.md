@@ -13,18 +13,7 @@ Language) queries. It offers a simple and intuitive interface to track the statu
 
 ## Installation
 
-To set up Jira Issue Tracker, you will need Python and the following libraries:
-
-- Kivy
-- KivyMD
-- Requests
-- python-dotenv
-
-Install the dependencies with:
-
-```bash
-pip install kivy kivymd requests python-dotenv
-```
+To set up Jira Issue Tracker, you will need Python and the required libraries.
 
 ## Usage
 
