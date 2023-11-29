@@ -1,7 +1,7 @@
 # Jira Issue Tracker
 
 Jira Issue Tracker is a Kivy-based application designed to provide an overview of Jira issues based on custom JQL (Jira Query
-Language) queries. It offers a simple and intuitive interface to track the status of various issues and tasks.
+Language) queries. It offers a simple and intuitive interface to track the status of various issues without needing to browse to Jira.
 
 ## Features
 
