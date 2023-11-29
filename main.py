@@ -9,7 +9,7 @@ from jira_issue_tracker import JiraIssueTracker
 kivy.require('2.1.0')
 
 
-class JiraTrackerApp(MDApp):  # Changed from App to MDApp
+class JiraTrackerApp(MDApp):
 
     def build(self):
         # Set the window size (overall size of the program)
@@ -23,7 +23,7 @@ class JiraTrackerApp(MDApp):  # Changed from App to MDApp
         self.theme_cls.theme_style = 'Dark'
 
         # if there are not environment variables set in a .env file, then we need the user to put them in
-        if not (get_key('.env', 'JIRA_API_KEY') and get_key('.env', 'JIRA_SITE_URL')):
+        if not (get_key('.env', 'JIRA_API_TOKEN') and get_key('.env', 'JIRA_SITE_URL')):
             return JiraConnectionSettingsPopup()
         else:
             # the variables were set so we can attempt to use them to get information from Jira Server

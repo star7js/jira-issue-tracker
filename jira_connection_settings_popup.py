@@ -15,7 +15,7 @@ class JiraConnectionSettingsPopup(MDDialog):
 
         # Get current values from .env, if they exist
         current_jira_site_url = os.getenv('JIRA_SITE_URL', 'Jira Site URL')
-        current_jira_api_key = os.getenv('JIRA_API_KEY', 'Jira Personal Access Token')
+        current_jira_api_token= os.getenv('JIRA_API_TOKEN', 'Jira Personal Access Token')
 
         # Create labels
         jira_site_url_label = MDLabel(
@@ -39,8 +39,8 @@ class JiraConnectionSettingsPopup(MDDialog):
             multiline=False
         )
 
-        self.jira_api_key = MDTextField(
-            hint_text=current_jira_api_key,
+        self.jira_api_token = MDTextField(
+            hint_text=current_jira_api_token,
             size_hint=(1, None),
             height="48dp",
             multiline=False
@@ -59,7 +59,7 @@ class JiraConnectionSettingsPopup(MDDialog):
         content.add_widget(jira_site_url_label)
         content.add_widget(self.jira_site_url)
         content.add_widget(jira_api_key_label)
-        content.add_widget(self.jira_api_key)
+        content.add_widget(self.jira_api_token)
 
         save_button = MDRaisedButton(
             text="Save and Close Program",
@@ -80,15 +80,15 @@ class JiraConnectionSettingsPopup(MDDialog):
 
         # Set the height for MDTextFields to None to allow for auto-sizing
         self.jira_site_url.height = '30dp'
-        self.jira_api_key.height = '30dp'
+        self.jira_api_token.height = '30dp'
 
     def save_settings(self, instance):
-        jira_api_key = self.jira_api_key.text.strip()
+        jira_api_token = self.jira_api_token.text.strip()
         jira_site_url = self.jira_site_url.text.rstrip("/")
 
         try:
-            if jira_api_key:
-                set_key('.env', 'JIRA_API_KEY', jira_api_key)
+            if jira_api_token:
+                set_key('.env', 'JIRA_API_TOKEN', jira_api_token)
             if jira_site_url:
                 set_key('.env', 'JIRA_SITE_URL', jira_site_url)
             self.dismiss()

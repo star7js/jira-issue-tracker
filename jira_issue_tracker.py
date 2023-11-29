@@ -1,3 +1,5 @@
+import os
+
 from dotenv import get_key
 from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
@@ -37,9 +39,7 @@ class JiraIssueTracker(GridLayout):
             "Query One": JQL_QUERY_ONE,
             "Query Two": JQL_QUERY_TWO,
             "Query Three": JQL_QUERY_THREE,
-            "Query Four": JQL_QUERY_FOUR,
-            # "Query Five": JQL_QUERY_FIVE,
-            # "Query Six": JQL_QUERY_SIX
+            "Query Four": JQL_QUERY_FOUR
         }
 
         # Filter out empty queries and count them
@@ -109,8 +109,15 @@ class JiraIssueTracker(GridLayout):
 
     def update_labels(self, dt):
         for box in self.boxes:
-            try:
-                count = get_jql_query_results(box.jql_query)  # Only pass the JQL query
-                box.update_label(count)
-            except RequestException:
-                box.update_label("Error fetching data")
+            if os.getenv('JIRA_SERVER'):
+                try:
+                    count = get_jql_query_results(box.jql_query)  # Only pass the JQL query
+                    box.update_label(count)
+                except RequestException:
+                    box.update_label("Error fetching data")
+            else:
+                try:
+                    count = get_jql_query_results(box.jql_query)  # Only pass the JQL query
+                    box.update_label(count)
+                except RequestException:
+                    box.update_label("Error fetching data")
