@@ -7,7 +7,8 @@ Language) queries. It offers a simple and intuitive interface to track the statu
 ## Features
 
 - Display issues in a grid layout with customizable queries
-- Fetch and update issue counts at regular intervals
+- Fetch and update issue counts at regular intervals (default setting: 1 hr)
+- Clicking box will directly go to your site with that JQL search performed
 - Toggle between light and dark mode for user convenience
 - Easy access to user settings
 
