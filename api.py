@@ -1,7 +1,6 @@
-import os
 import requests
 import logging
-from dotenv import load_dotenv
+from dotenv import load_dotenv, get_key
 from security import safe_requests
 
 # Load environment variables
@@ -11,19 +10,15 @@ load_dotenv()
 DEFAULT_API_REQUEST_INTERVAL = 60 * 60  # 1 time per hour
 
 # Global constants
-JIRA_SITE_URL = os.getenv('JIRA_SITE_URL')
-JIRA_API_TOKEN = os.getenv('JIRA_API_TOKEN')
+JIRA_SITE_URL = get_key('.env', 'JIRA_SITE_URL') or ''
+JIRA_API_TOKEN = get_key('.env', 'JIRA_API_TOKEN') or ''
 JIRA_API_ENDPOINT = "/rest/api/latest/search"
 
-# JQL Queries from .env file
-if os.getenv('JQL_QUERY_ONE'):
-    JQL_QUERY_ONE = os.getenv('JQL_QUERY_ONE')
-if os.getenv('JQL_QUERY_TWO'):
-    JQL_QUERY_TWO = os.getenv('JQL_QUERY_TWO')
-if os.getenv('JQL_QUERY_THREE'):
-    JQL_QUERY_THREE = os.getenv('JQL_QUERY_THREE')
-if os.getenv('JQL_QUERY_FOUR'):
-    JQL_QUERY_FOUR = os.getenv('JQL_QUERY_FOUR')
+# JQL Queries from .env file with defaults
+JQL_QUERY_ONE = get_key('.env', 'JQL_QUERY_ONE') or ''
+JQL_QUERY_TWO = get_key('.env', 'JQL_QUERY_TWO') or ''
+JQL_QUERY_THREE = get_key('.env', 'JQL_QUERY_THREE') or ''
+JQL_QUERY_FOUR = get_key('.env', 'JQL_QUERY_FOUR') or ''
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

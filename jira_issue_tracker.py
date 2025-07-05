@@ -3,6 +3,7 @@ import os
 from dotenv import get_key
 from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
 from requests.exceptions import RequestException
 from kivymd.uix.button import MDRaisedButton
 from kivymd.app import MDApp
@@ -19,9 +20,6 @@ class JiraIssueTracker(GridLayout):
     #  TODO: Click to visit hint on the JQL box TODO: Changes to the appearance of the box if desired
     #   TODO: Complicated filters might need to be referenced by their number, or else we need to format the data (
     #    regex to change "" to '', others?)
-
-    jira_site_url = get_key('.env', 'JIRA_SITE_URL')
-    jira_base_url = f"{jira_site_url}/issues/"
 
     def create_issue_box(self, title, query):
         box = IssueBox(title, query, self.jira_base_url)
@@ -57,18 +55,17 @@ class JiraIssueTracker(GridLayout):
         # for _ in range(6 - query_count):
         # self.create_empty_box()
 
-    def toggle_mode(self, instance):
-        app = MDApp.get_running_app()
-        app.theme_cls.theme_style = 'Dark' if app.theme_cls.theme_style == 'Light' else 'Light'
-        self.update_ui_for_theme(app.theme_cls.theme_style)
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.boxes = []  # Initialize self.boxes as an empty list
         self.mode_button = None
-        self.jira_base_url = self.jira_base_url
+        self.jira_site_url = get_key('.env', 'JIRA_SITE_URL')
+        self.jira_base_url = f"{self.jira_site_url}/issues/" if self.jira_site_url else None
         self.dark_mode = True
-        self.setup_ui()
+        if not self.jira_site_url:
+            self.add_widget(Label(text="Error: Jira Site URL is not set. Please configure your connection in settings.", color=(1,0,0,1)))
+        else:
+            self.setup_ui()
 
     def setup_ui(self):
         self.cols = 2
@@ -109,7 +106,7 @@ class JiraIssueTracker(GridLayout):
 
     def update_labels(self, dt):
         for box in self.boxes:
-            if os.getenv('JIRA_SERVER'):
+            if get_key('.env', 'JIRA_SERVER'):
                 try:
                     count = get_jql_query_results(box.jql_query)  # Only pass the JQL query
                     box.update_label(count)

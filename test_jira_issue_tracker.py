@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from kivy.base import EventLoop
 from kivymd.app import MDApp
 from jira_issue_tracker import JiraIssueTracker
@@ -11,7 +12,8 @@ class TestApp(MDApp):
 
 class TestJiraIssueTracker(unittest.TestCase):
 
-    def test_initialization(self):
+    @patch('jira_issue_tracker.get_key', return_value='https://dummy-jira-url.com')
+    def test_initialization(self, mock_get_key):
         # Start the Kivy event loop
         EventLoop.ensure_window()
         app = TestApp()

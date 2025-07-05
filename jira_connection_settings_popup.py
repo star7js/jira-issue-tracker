@@ -1,11 +1,10 @@
-from dotenv import load_dotenv, set_key, find_dotenv
+from dotenv import load_dotenv, set_key, find_dotenv, get_key
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.dialog import MDDialog
 from kivymd.app import MDApp
 from kivymd.uix.label import MDLabel
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
-import os
 
 
 class JiraConnectionSettingsPopup(MDDialog):
@@ -14,8 +13,8 @@ class JiraConnectionSettingsPopup(MDDialog):
         load_dotenv(find_dotenv())
 
         # Get current values from .env, if they exist
-        current_jira_site_url = os.getenv('JIRA_SITE_URL', 'Jira Site URL')
-        current_jira_api_token= os.getenv('JIRA_API_TOKEN', 'Jira Personal Access Token')
+        current_jira_site_url = get_key('.env', 'JIRA_SITE_URL') or 'Jira Site URL'
+        current_jira_api_token = get_key('.env', 'JIRA_API_TOKEN') or 'Jira Personal Access Token'
 
         # Create labels
         jira_site_url_label = MDLabel(
