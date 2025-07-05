@@ -12,7 +12,7 @@ from pathlib import Path
 
 def main():
     """Main setup function"""
-    print("🚀 Jira Issue Tracker Server - Setup")
+    print("🚀 Jira Issue Tracker - Setup")
     print("=" * 50)
 
     # Check if .env already exists
@@ -45,7 +45,9 @@ def main():
     # Get Jira site URL
     print("\n1. Jira Site URL")
     print("   Cloud: https://yourcompany.atlassian.net")
-    print("   Server/Data Center: https://jira.yourcompany.com or https://yourcompany.com/jira")
+    print(
+        "   Server/Data Center: https://jira.yourcompany.com or https://yourcompany.com/jira"
+    )
     jira_url = input("   Enter your Jira site URL: ").strip()
 
     if jira_url:

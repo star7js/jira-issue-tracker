@@ -1,6 +1,6 @@
 # Jira Issue Tracker
 
-<img src="https://github.com/star7js/jira-issue-tracker-server/assets/126814341/6b9d8d3e-f3ce-4d8d-a99d-2be30f33c757.png" width="50%" height="50%">
+<img src="https://github.com/star7js/jira-issue-tracker/assets/126814341/6b9d8d3e-f3ce-4d8d-a99d-2be30f33c757.png" width="50%" height="50%">
 
 Jira Issue Tracker is a Kivy-based desktop application designed to provide an overview of Jira issues based on custom JQL (Jira Query Language) queries. It offers a simple and intuitive interface to track the status of various issues without needing to browse to Jira.
 
@@ -23,15 +23,15 @@ Jira Issue Tracker is a Kivy-based desktop application designed to provide an ov
 ### Install from PyPI
 
 ```bash
-pip install jira-issue-tracker-server
+pip install jira-issue-tracker
 ```
 
 ### Install from Source
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/star7js/jira-issue-tracker-server.git
-cd jira-issue-tracker-server
+git clone https://github.com/star7js/jira-issue-tracker.git
+cd jira-issue-tracker
 ```
 
 2. Create a virtual environment (recommended):
@@ -203,7 +203,7 @@ pip install -e ".[dev]"
 ## Project Structure
 
 ```
-jira-issue-tracker-server/
+jira-issue-tracker/
 ├── main.py                          # Main application entry point
 ├── setup.py                         # Interactive setup script
 ├── jira_issue_tracker.py            # Main application logic
@@ -258,7 +258,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 
-1. Check the [Issues](https://github.com/star7js/jira-issue-tracker-server/issues) page
+1. Check the [Issues](https://github.com/star7js/jira-issue-tracker/issues) page
 2. Create a new issue with detailed information about your problem
 3. Include your Python version, operating system, and any error messages
 
