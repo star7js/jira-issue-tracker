@@ -12,7 +12,7 @@ class TestApp(MDApp):
 
 class TestJiraIssueTracker(unittest.TestCase):
 
-    @patch('jira_issue_tracker.get_key', return_value='https://dummy-jira-url.com')
+    @patch("jira_issue_tracker.get_key", return_value="https://dummy-jira-url.com")
     def test_initialization(self, mock_get_key):
         # Start the Kivy event loop
         EventLoop.ensure_window()
@@ -27,5 +27,5 @@ class TestJiraIssueTracker(unittest.TestCase):
         app.stop()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

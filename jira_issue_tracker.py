@@ -1,5 +1,3 @@
-import os
-
 from dotenv import get_key
 from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
@@ -8,9 +6,14 @@ from requests.exceptions import RequestException
 from kivymd.uix.button import MDRaisedButton
 from kivymd.app import MDApp
 
-from api import (get_jql_query_results, DEFAULT_API_REQUEST_INTERVAL,
-                 JQL_QUERY_ONE, JQL_QUERY_TWO, JQL_QUERY_THREE,
-                 JQL_QUERY_FOUR)
+from api import (
+    get_jql_query_results,
+    DEFAULT_API_REQUEST_INTERVAL,
+    JQL_QUERY_ONE,
+    JQL_QUERY_TWO,
+    JQL_QUERY_THREE,
+    JQL_QUERY_FOUR,
+)
 from issue_box import IssueBox
 from jira_connection_settings_popup import open_settings_popup
 
@@ -37,7 +40,7 @@ class JiraIssueTracker(GridLayout):
             "Query One": JQL_QUERY_ONE,
             "Query Two": JQL_QUERY_TWO,
             "Query Three": JQL_QUERY_THREE,
-            "Query Four": JQL_QUERY_FOUR
+            "Query Four": JQL_QUERY_FOUR,
         }
 
         # Filter out empty queries and count them
@@ -63,7 +66,12 @@ class JiraIssueTracker(GridLayout):
         self.jira_base_url = f"{self.jira_site_url}/issues/" if self.jira_site_url else None
         self.dark_mode = True
         if not self.jira_site_url:
-            self.add_widget(Label(text="Error: Jira Site URL is not set. Please configure your connection in settings.", color=(1,0,0,1)))
+            self.add_widget(
+                Label(
+                    text="Error: Jira Site URL is not set. Please configure your connection in settings.",
+                    color=(1, 0, 0, 1),
+                )
+            )
         else:
             self.setup_ui()
 
@@ -80,9 +88,9 @@ class JiraIssueTracker(GridLayout):
     def create_mode_toggle_button(self):
         self.mode_button = MDRaisedButton(
             text="Toggle Light/Dark Mode",
-            size_hint=(.5, None),
+            size_hint=(0.5, None),
             height=50,
-            pos_hint={'center_x': 0.5}
+            pos_hint={"center_x": 0.5},
         )
         self.mode_button.bind(on_press=self.toggle_mode)
         self.add_widget(self.mode_button)
@@ -90,16 +98,16 @@ class JiraIssueTracker(GridLayout):
     def create_user_settings_button(self):
         self.user_settings_button = MDRaisedButton(
             text="User Settings",
-            size_hint=(.5, None),
+            size_hint=(0.5, None),
             height=50,
-            pos_hint={'center_x': 0.5}
+            pos_hint={"center_x": 0.5},
         )
         self.user_settings_button.bind(on_press=open_settings_popup)
         self.add_widget(self.user_settings_button)
 
     def toggle_mode(self, instance):
         app = MDApp.get_running_app()
-        new_theme_style = 'Dark' if app.theme_cls.theme_style == 'Light' else 'Light'
+        new_theme_style = "Dark" if app.theme_cls.theme_style == "Light" else "Light"
         app.theme_cls.theme_style = new_theme_style
         for box in self.boxes:
             box.update_ui_colors(new_theme_style)  # Pass the new_theme_style variable, not the property

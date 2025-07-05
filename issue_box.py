@@ -6,8 +6,8 @@ from kivymd.app import MDApp
 from kivy.utils import get_color_from_hex
 
 # Define your text colors for dark and light themes
-LIGHT_TEXT_COLOR = get_color_from_hex('ffffff')  # White text for dark backgrounds
-DARK_TEXT_COLOR = get_color_from_hex('000000')  # Black text for light backgrounds
+LIGHT_TEXT_COLOR = get_color_from_hex("ffffff")  # White text for dark backgrounds
+DARK_TEXT_COLOR = get_color_from_hex("000000")  # Black text for light backgrounds
 
 
 class IssueBox(MDCard):
@@ -52,7 +52,7 @@ class IssueBox(MDCard):
             height="48dp",
         )
         # Adjust label height dynamically based on query length
-        query_lines = self.jql_query.count('\n') + 1
+        query_lines = self.jql_query.count("\n") + 1
         label_height = max(24, query_lines * 24)  # Adjust 24dp per line
         self.jql_label = MDLabel(
             text=self.jql_query,
@@ -81,7 +81,7 @@ class IssueBox(MDCard):
     # Inside IssueBox class
     def update_ui_colors(self, theme_style):
         app = MDApp.get_running_app()
-        if theme_style == 'Dark':
+        if theme_style == "Dark":
             self.md_bg_color = app.theme_cls.bg_dark
             text_color = LIGHT_TEXT_COLOR
         else:
