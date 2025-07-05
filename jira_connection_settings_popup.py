@@ -1,10 +1,40 @@
+import os
 from dotenv import load_dotenv, set_key, find_dotenv, get_key
-from kivymd.uix.textfield import MDTextField
-from kivymd.uix.dialog import MDDialog
-from kivymd.app import MDApp
-from kivymd.uix.label import MDLabel
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDRaisedButton
+
+# Conditional imports for CI environment
+if os.environ.get("CI") != "true":
+    from kivymd.uix.textfield import MDTextField
+    from kivymd.uix.dialog import MDDialog
+    from kivymd.app import MDApp
+    from kivymd.uix.label import MDLabel
+    from kivymd.uix.boxlayout import MDBoxLayout
+    from kivymd.uix.button import MDRaisedButton
+else:
+    # Mock classes for CI environment
+    class MDTextField:
+        def __init__(self, **kwargs):
+            pass
+
+    class MDDialog:
+        def __init__(self, **kwargs):
+            pass
+
+    class MDApp:
+        @staticmethod
+        def get_running_app():
+            return None
+
+    class MDLabel:
+        def __init__(self, **kwargs):
+            pass
+
+    class MDBoxLayout:
+        def __init__(self, **kwargs):
+            pass
+
+    class MDRaisedButton:
+        def __init__(self, **kwargs):
+            pass
 
 
 class JiraConnectionSettingsPopup(MDDialog):

@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from kivy.base import EventLoop
 from jira_issue_tracker import JiraIssueTracker
 from requests.exceptions import RequestException
 
@@ -10,11 +9,11 @@ class TestErrorHandling(unittest.TestCase):
 
     def setUp(self):
         """Set up test environment."""
-        EventLoop.ensure_window()
+        pass  # No Kivy window creation needed
 
     def tearDown(self):
         """Clean up after tests."""
-        EventLoop.close()
+        pass  # No cleanup needed
 
     def test_missing_jira_site_url_shows_error_label(self):
         """Test that missing Jira site URL shows an error label."""
