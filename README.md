@@ -49,30 +49,90 @@ pip install -e .
 
 ### Environment Setup
 
-1. Copy the example environment file:
+**Option 1: Interactive Setup (Recommended)**
+```bash
+python setup.py
+```
+This will guide you through the configuration process step by step.
+
+**Option 2: Manual Setup**
+1. **Copy the example environment file:**
 ```bash
 cp example.env .env
 ```
 
-2. Edit the `.env` file with your Jira configuration:
-```env
-JQL_QUERY_ONE=project = DEMO
-JQL_QUERY_TWO=project = IP
-JQL_QUERY_THREE=reporter = currentUser() order by created DESC
-JQL_QUERY_FOUR=project = ITZ
-JIRA_API_TOKEN=your_api_token_here
-JIRA_SITE_URL=https://your-jira-site.com
-JIRA_SERVER=TRUE
-```
+2. **Edit the `.env` file with your Jira configuration:**
+   - Open `.env` in your preferred text editor
+   - Update the required fields (see below)
+   - Save the file
 
 > **⚠️ Security Note**: Never commit your `.env` file to version control as it contains sensitive information like API tokens. The `.env` file is already included in `.gitignore` to prevent accidental commits.
 
+### Required Configuration
+
+You must configure these two fields to connect to your Jira instance:
+
+```env
+# Your Jira site URL (e.g., https://yourcompany.atlassian.net)
+JIRA_SITE_URL=https://yourcompany.atlassian.net
+
+# Your Jira Personal Access Token (not your password!)
+JIRA_API_TOKEN=your_personal_access_token_here
+```
+
+### Optional Configuration
+
+You can customize the JQL queries to track different types of issues:
+
+```env
+# Query 1: Default project issues
+JQL_QUERY_ONE=project = DEMO
+
+# Query 2: Another project or filter
+JQL_QUERY_TWO=project = IP
+
+# Query 3: Issues reported by current user
+JQL_QUERY_THREE=reporter = currentUser() order by created DESC
+
+# Query 4: Additional project or custom filter
+JQL_QUERY_FOUR=project = ITZ
+
+# Server mode (set to TRUE for background service)
+JIRA_SERVER=FALSE
+```
+
 ### Jira API Token Setup
 
-1. Go to your Jira instance
-2. Navigate to Profile Settings → Security → API tokens
-3. Create a new API token
-4. Copy the token to your `.env` file
+1. **Go to your Atlassian account:**
+   - Visit: https://id.atlassian.com/manage-profile/security/api-tokens
+   - Or navigate from your Jira instance: Profile Settings → Security → API tokens
+
+2. **Create a new API token:**
+   - Click "Create API token"
+   - Give it a descriptive label (e.g., "Jira Issue Tracker Desktop App")
+   - Copy the generated token
+
+3. **Add to your `.env` file:**
+   - Paste the token as the value for `JIRA_API_TOKEN`
+
+> **💡 Tip**: API tokens are more secure than passwords and can be revoked individually if needed.
+
+### JQL Query Examples
+
+Here are some useful JQL patterns you can use:
+
+| Query Type | JQL Example | Description |
+|------------|-------------|-------------|
+| Project Issues | `project = DEMO` | All issues in a specific project |
+| Assigned to Me | `assignee = currentUser()` | Issues assigned to you |
+| My Reports | `reporter = currentUser()` | Issues you reported |
+| High Priority | `priority = High` | High priority issues |
+| Recent Issues | `created >= -7d` | Issues created in last 7 days |
+| Open Issues | `status != Done` | Issues not marked as done |
+| Combined | `project = DEMO AND priority = High` | Multiple conditions |
+| Ordered | `project = DEMO ORDER BY created DESC` | Issues sorted by creation date |
+
+For more JQL help, visit: [Atlassian JQL Documentation](https://support.atlassian.com/jira-software-cloud/docs/use-advanced-search-with-jira-query-language-jql/)
 
 ## Usage
 
@@ -123,6 +183,7 @@ pip install -e ".[dev]"
 ```
 jira-issue-tracker-server/
 ├── main.py                          # Main application entry point
+├── setup.py                         # Interactive setup script
 ├── jira_issue_tracker.py            # Main application logic
 ├── api.py                           # Jira API integration
 ├── issue_box.py                     # Individual issue box component
@@ -146,7 +207,31 @@ jira-issue-tracker-server/
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Support
+## Troubleshooting
+
+### Common Issues
+
+#### "Key JIRA_SITE_URL not found in .env"
+- **Solution**: Make sure you've copied `example.env` to `.env` and updated the values
+- **Check**: Verify your `.env` file exists in the project root directory
+
+#### "Unable to connect to Jira"
+- **Solution**: Verify your `JIRA_SITE_URL` is correct (include `https://`)
+- **Check**: Test the URL in your browser to ensure it's accessible
+
+#### "Authentication failed"
+- **Solution**: Regenerate your API token and update the `.env` file
+- **Check**: Ensure you're using an API token, not your password
+
+#### "No issues found"
+- **Solution**: Check your JQL queries are valid
+- **Check**: Test the JQL query directly in your Jira instance
+
+#### "KivyMD version warning"
+- **Solution**: This is just a warning and doesn't affect functionality
+- **Note**: The app works fine with the current KivyMD version
+
+### Getting Help
 
 If you encounter any issues or have questions:
 
