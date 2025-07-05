@@ -51,7 +51,7 @@ pip install -e .
 
 **Option 1: Interactive Setup (Recommended)**
 ```bash
-python setup.py
+python setup_interactive.py
 ```
 This will guide you through the configuration process step by step.
 
@@ -205,7 +205,7 @@ pip install -e ".[dev]"
 ```
 jira-issue-tracker/
 ├── main.py                          # Main application entry point
-├── setup.py                         # Interactive setup script
+├── setup_interactive.py             # Interactive setup script
 ├── jira_issue_tracker.py            # Main application logic
 ├── api.py                           # Jira API integration
 ├── issue_box.py                     # Individual issue box component
