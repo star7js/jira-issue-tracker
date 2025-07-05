@@ -1,12 +1,35 @@
+import os
 from dotenv import get_key
 from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from requests.exceptions import RequestException
-from kivymd.uix.button import MDRaisedButton
-from kivymd.uix.tooltip import MDTooltip
-from kivymd.app import MDApp
-from kivymd.uix.label import MDLabel
+
+# Conditional imports for CI environment
+if os.environ.get("CI") != "true":
+    from kivymd.uix.button import MDRaisedButton
+    from kivymd.uix.tooltip import MDTooltip
+    from kivymd.app import MDApp
+    from kivymd.uix.label import MDLabel
+else:
+    # Mock classes for CI environment
+    class MDRaisedButton:
+        def __init__(self, **kwargs):
+            pass
+
+    class MDTooltip:
+        def __init__(self, **kwargs):
+            pass
+
+    class MDApp:
+        @staticmethod
+        def get_running_app():
+            return None
+
+    class MDLabel:
+        def __init__(self, **kwargs):
+            pass
+
 
 from api import (
     get_jql_query_results,

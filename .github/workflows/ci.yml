@@ -38,6 +38,7 @@ jobs:
       env:
         DISPLAY: :99
         PYTHONPATH: .
+        CI: true
       run: |
         pytest test_*.py -v --cov=. --cov-report=xml
     

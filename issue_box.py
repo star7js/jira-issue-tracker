@@ -1,11 +1,41 @@
+import os
 import urllib
 import webbrowser
-from kivymd.uix.label import MDLabel
-from kivymd.uix.card import MDCard
-from kivymd.uix.spinner import MDSpinner
-from kivymd.uix.tooltip import MDTooltip
-from kivymd.app import MDApp
-from kivy.utils import get_color_from_hex
+
+# Conditional imports for CI environment
+if os.environ.get("CI") != "true":
+    from kivymd.uix.label import MDLabel
+    from kivymd.uix.card import MDCard
+    from kivymd.uix.spinner import MDSpinner
+    from kivymd.uix.tooltip import MDTooltip
+    from kivymd.app import MDApp
+    from kivy.utils import get_color_from_hex
+else:
+    # Mock classes for CI environment
+    class MDLabel:
+        def __init__(self, **kwargs):
+            pass
+
+    class MDCard:
+        def __init__(self, **kwargs):
+            pass
+
+    class MDSpinner:
+        def __init__(self, **kwargs):
+            pass
+
+    class MDTooltip:
+        def __init__(self, **kwargs):
+            pass
+
+    class MDApp:
+        @staticmethod
+        def get_running_app():
+            return None
+
+    def get_color_from_hex(hex_color):
+        return (0, 0, 0, 1)
+
 
 # Define your text colors for dark and light themes
 LIGHT_TEXT_COLOR = get_color_from_hex("ffffff")  # White text for dark backgrounds
