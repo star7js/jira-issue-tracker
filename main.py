@@ -7,7 +7,7 @@ from jira_connection_settings_popup import JiraConnectionSettingsPopup
 class JiraTrackerApp(MDApp):
     def build(self):
         # Check if environment variables are set
-        jira_site_url = get_key('.env', 'JIRA_SITE_URL')
+        jira_site_url = get_key(".env", "JIRA_SITE_URL")
 
         if not jira_site_url:
             # If environment variables are not set, show settings popup
@@ -21,5 +21,5 @@ def main():
     JiraTrackerApp().run()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

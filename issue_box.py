@@ -47,14 +47,13 @@ class IssueBox(MDCard):
             if app:
                 # Tooltip for the entire card explaining click functionality
                 card_tooltip = MDTooltip(
-                    tooltip_text="Click to view these issues in Jira",
-                    widget=self
+                    tooltip_text="Click to view these issues in Jira", widget=self
                 )
-                
+
                 # Tooltip for the JQL query
                 jql_tooltip = MDTooltip(
                     tooltip_text="Click to open this query in Jira",
-                    widget=self.jql_label
+                    widget=self.jql_label,
                 )
         except:
             pass  # Skip tooltips if app context not available
@@ -65,7 +64,7 @@ class IssueBox(MDCard):
             size_hint=(None, None),
             size=("24dp", "24dp"),
             pos_hint={"center_x": 0.5},
-            active=False
+            active=False,
         )
 
     def create_labels(self):

@@ -64,8 +64,10 @@ class JiraIssueTracker(GridLayout):
         super().__init__(**kwargs)
         self.boxes = []  # Initialize self.boxes as an empty list
         self.mode_button = None
-        self.jira_site_url = get_key('.env', 'JIRA_SITE_URL')
-        self.jira_base_url = f"{self.jira_site_url}/issues/" if self.jira_site_url else None
+        self.jira_site_url = get_key(".env", "JIRA_SITE_URL")
+        self.jira_base_url = (
+            f"{self.jira_site_url}/issues/" if self.jira_site_url else None
+        )
         self.dark_mode = True
         if not self.jira_site_url:
             error_label = MDLabel(
@@ -92,13 +94,10 @@ class JiraIssueTracker(GridLayout):
     def create_mode_toggle_button(self):
         # Add a separator label before buttons
         separator = MDLabel(
-            text="",
-            size_hint_y=None,
-            height="20dp",
-            theme_text_color="Hint"
+            text="", size_hint_y=None, height="20dp", theme_text_color="Hint"
         )
         self.add_widget(separator)
-        
+
         self.mode_button = MDRaisedButton(
             text="Toggle Light/Dark Mode",
             size_hint=(0.5, None),
@@ -107,18 +106,18 @@ class JiraIssueTracker(GridLayout):
             md_bg_color=(0.2, 0.6, 1, 1),  # Blue color for better visibility
         )
         self.mode_button.bind(on_press=self.toggle_mode)
-        
+
         # Add tooltip to mode button (only if app is running)
         try:
             app = MDApp.get_running_app()
             if app:
                 tooltip = MDTooltip(
                     tooltip_text="Switch between light and dark themes for better visibility",
-                    widget=self.mode_button
+                    widget=self.mode_button,
                 )
         except:
             pass  # Skip tooltip if app context not available
-        
+
         self.add_widget(self.mode_button)
 
     def create_user_settings_button(self):
@@ -130,18 +129,18 @@ class JiraIssueTracker(GridLayout):
             md_bg_color=(0.3, 0.7, 0.3, 1),  # Green color for settings
         )
         self.user_settings_button.bind(on_press=open_settings_popup)
-        
+
         # Add tooltip to settings button (only if app is running)
         try:
             app = MDApp.get_running_app()
             if app:
                 tooltip = MDTooltip(
                     tooltip_text="Configure Jira connection settings and credentials",
-                    widget=self.user_settings_button
+                    widget=self.user_settings_button,
                 )
         except:
             pass  # Skip tooltip if app context not available
-        
+
         self.add_widget(self.user_settings_button)
 
     def toggle_mode(self, instance):
@@ -149,14 +148,18 @@ class JiraIssueTracker(GridLayout):
         new_theme_style = "Dark" if app.theme_cls.theme_style == "Light" else "Light"
         app.theme_cls.theme_style = new_theme_style
         for box in self.boxes:
-            box.update_ui_colors(new_theme_style)  # Pass the new_theme_style variable, not the property
+            box.update_ui_colors(
+                new_theme_style
+            )  # Pass the new_theme_style variable, not the property
 
     def update_labels(self, dt):
         for box in self.boxes:
             box.show_loading()  # Show loading indicator
-            if get_key('.env', 'JIRA_SERVER'):
+            if get_key(".env", "JIRA_SERVER"):
                 try:
-                    count = get_jql_query_results(box.jql_query)  # Only pass the JQL query
+                    count = get_jql_query_results(
+                        box.jql_query
+                    )  # Only pass the JQL query
                     box.update_label(count)
                 except RequestException as e:
                     error_msg = "Connection Error"
@@ -171,7 +174,9 @@ class JiraIssueTracker(GridLayout):
                     box.update_label_error(error_msg)
             else:
                 try:
-                    count = get_jql_query_results(box.jql_query)  # Only pass the JQL query
+                    count = get_jql_query_results(
+                        box.jql_query
+                    )  # Only pass the JQL query
                     box.update_label(count)
                 except RequestException as e:
                     error_msg = "Connection Error"
