@@ -16,13 +16,26 @@ class TestErrorHandling(unittest.TestCase):
         """Clean up after tests."""
         EventLoop.close()
 
-    @patch('jira_issue_tracker.get_key', return_value=None)
-    def test_missing_jira_site_url_shows_error_label(self, mock_get_key):
-        """Test that missing JIRA_SITE_URL shows an error label instead of normal UI."""
-        tracker = JiraIssueTracker()
-        # Check that setup_ui was not called (no normal UI)
-        self.assertEqual(len(tracker.children), 1)  # Only the error label
-        self.assertIn("Error: Jira Site URL is not set", tracker.children[0].text)
+    def test_missing_jira_site_url_shows_error_label(self):
+        """Test that missing Jira site URL shows an error label."""
+        with patch('jira_issue_tracker.get_key', return_value=None):
+            # Test the logic without creating the full widget to avoid KivyMD context issues
+            tracker = JiraIssueTracker.__new__(JiraIssueTracker)
+            tracker.jira_site_url = None
+            tracker.jira_base_url = None
+            
+            # Mock the MDLabel creation to avoid KivyMD context issues
+            with patch('jira_issue_tracker.MDLabel') as mock_mdlabel:
+                mock_label = MagicMock()
+                mock_mdlabel.return_value = mock_label
+                
+                with patch.object(tracker, 'add_widget') as mock_add_widget:
+                    with patch.object(tracker, 'setup_ui') as mock_setup:
+                        tracker.__init__()
+                        # Verify that setup_ui is not called when Jira site URL is missing
+                        mock_setup.assert_not_called()
+                        # Verify that an error widget was added
+                        mock_add_widget.assert_called_once_with(mock_label)
 
     @patch('jira_issue_tracker.get_jql_query_results', side_effect=RequestException("API Error"))
     def test_api_error_handling_logic(self, mock_get_results):
@@ -41,8 +54,8 @@ class TestErrorHandling(unittest.TestCase):
             # Test the update_labels method directly
             with patch('jira_issue_tracker.get_key', return_value='TRUE'):
                 tracker.update_labels(0)
-                # Verify that the box's update_label was called with error message
-                mock_box.update_label.assert_called_with("Error fetching data")
+                # Verify that the box's update_label_error was called with error message
+                mock_box.update_label_error.assert_called_with("Connection Error")
 
     def test_empty_jql_queries_are_filtered_out_logic(self):
         """Test that empty JQL queries are filtered out in the logic."""

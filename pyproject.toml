@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jira-issue-tracker-server"
-version = "0.2.0"
+version = "0.3.0"
 description = "A Kivy-based desktop application for tracking Jira issues with custom JQL queries"
 readme = "README.md"
 requires-python = ">=3.9"

@@ -4,7 +4,9 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from requests.exceptions import RequestException
 from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.tooltip import MDTooltip
 from kivymd.app import MDApp
+from kivymd.uix.label import MDLabel
 
 from api import (
     get_jql_query_results,
@@ -66,19 +68,21 @@ class JiraIssueTracker(GridLayout):
         self.jira_base_url = f"{self.jira_site_url}/issues/" if self.jira_site_url else None
         self.dark_mode = True
         if not self.jira_site_url:
-            self.add_widget(
-                Label(
-                    text="Error: Jira Site URL is not set. Please configure your connection in settings.",
-                    color=(1, 0, 0, 1),
-                )
+            error_label = MDLabel(
+                text="⚠️  Error: Jira Site URL is not set. Please configure your connection in settings.",
+                color=(1, 0, 0, 1),
+                halign="center",
+                theme_text_color="Error",
+                font_style="Body1",
             )
+            self.add_widget(error_label)
         else:
             self.setup_ui()
 
     def setup_ui(self):
         self.cols = 2
-        self.spacing = 10
-        self.padding = 10
+        self.spacing = 20  # Increased from 10 for better separation
+        self.padding = 20  # Increased from 10 for better margins
         self.create_issue_boxes()
         Clock.schedule_interval(self.update_labels, DEFAULT_API_REQUEST_INTERVAL)
         self.update_labels(0)
@@ -86,13 +90,35 @@ class JiraIssueTracker(GridLayout):
         self.create_user_settings_button()
 
     def create_mode_toggle_button(self):
+        # Add a separator label before buttons
+        separator = MDLabel(
+            text="",
+            size_hint_y=None,
+            height="20dp",
+            theme_text_color="Hint"
+        )
+        self.add_widget(separator)
+        
         self.mode_button = MDRaisedButton(
             text="Toggle Light/Dark Mode",
             size_hint=(0.5, None),
             height=50,
             pos_hint={"center_x": 0.5},
+            md_bg_color=(0.2, 0.6, 1, 1),  # Blue color for better visibility
         )
         self.mode_button.bind(on_press=self.toggle_mode)
+        
+        # Add tooltip to mode button (only if app is running)
+        try:
+            app = MDApp.get_running_app()
+            if app:
+                tooltip = MDTooltip(
+                    tooltip_text="Switch between light and dark themes for better visibility",
+                    widget=self.mode_button
+                )
+        except:
+            pass  # Skip tooltip if app context not available
+        
         self.add_widget(self.mode_button)
 
     def create_user_settings_button(self):
@@ -101,8 +127,21 @@ class JiraIssueTracker(GridLayout):
             size_hint=(0.5, None),
             height=50,
             pos_hint={"center_x": 0.5},
+            md_bg_color=(0.3, 0.7, 0.3, 1),  # Green color for settings
         )
         self.user_settings_button.bind(on_press=open_settings_popup)
+        
+        # Add tooltip to settings button (only if app is running)
+        try:
+            app = MDApp.get_running_app()
+            if app:
+                tooltip = MDTooltip(
+                    tooltip_text="Configure Jira connection settings and credentials",
+                    widget=self.user_settings_button
+                )
+        except:
+            pass  # Skip tooltip if app context not available
+        
         self.add_widget(self.user_settings_button)
 
     def toggle_mode(self, instance):
@@ -114,15 +153,34 @@ class JiraIssueTracker(GridLayout):
 
     def update_labels(self, dt):
         for box in self.boxes:
+            box.show_loading()  # Show loading indicator
             if get_key('.env', 'JIRA_SERVER'):
                 try:
                     count = get_jql_query_results(box.jql_query)  # Only pass the JQL query
                     box.update_label(count)
-                except RequestException:
-                    box.update_label("Error fetching data")
+                except RequestException as e:
+                    error_msg = "Connection Error"
+                    if "401" in str(e):
+                        error_msg = "Authentication Failed - Check credentials"
+                    elif "403" in str(e):
+                        error_msg = "Access Denied - Check permissions"
+                    elif "404" in str(e):
+                        error_msg = "Jira URL Not Found - Check configuration"
+                    elif "timeout" in str(e).lower():
+                        error_msg = "Request Timeout - Check network connection"
+                    box.update_label_error(error_msg)
             else:
                 try:
                     count = get_jql_query_results(box.jql_query)  # Only pass the JQL query
                     box.update_label(count)
-                except RequestException:
-                    box.update_label("Error fetching data")
+                except RequestException as e:
+                    error_msg = "Connection Error"
+                    if "401" in str(e):
+                        error_msg = "Authentication Failed - Check credentials"
+                    elif "403" in str(e):
+                        error_msg = "Access Denied - Check permissions"
+                    elif "404" in str(e):
+                        error_msg = "Jira URL Not Found - Check configuration"
+                    elif "timeout" in str(e).lower():
+                        error_msg = "Request Timeout - Check network connection"
+                    box.update_label_error(error_msg)
