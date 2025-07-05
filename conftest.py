@@ -9,6 +9,7 @@ if os.environ.get("CI") == "true":
     # Disable Kivy window creation
     os.environ["KIVY_WINDOW"] = "dummy"
 
+
 @pytest.fixture(autouse=True, scope="session")
 def patch_kivy_window_and_eventloop():
     """
