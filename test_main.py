@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from main import JiraTrackerApp
 
 
@@ -10,26 +10,34 @@ class TestJiraTrackerApp(unittest.TestCase):
         # Simulate environment variables not being set
         mock_get_key.return_value = None
 
-        # Initialize the app and check the returned widget
-        app = JiraTrackerApp()
-        widget = app.build()
-        # Assert that JiraConnectionSettingsPopup is initialized when env vars are not set
-        from jira_connection_settings_popup import JiraConnectionSettingsPopup
-
-        self.assertIsInstance(widget, JiraConnectionSettingsPopup)
+        # Test the logic without creating actual widgets
+        with patch('main.JiraConnectionSettingsPopup') as mock_popup:
+            mock_widget = MagicMock()
+            mock_popup.return_value = mock_widget
+            
+            app = JiraTrackerApp()
+            widget = app.build()
+            
+            # Verify the correct widget was created
+            mock_popup.assert_called_once()
+            self.assertEqual(widget, mock_widget)
 
     @patch("main.get_key")
     def test_environment_variables_set(self, mock_get_key):
         # Simulate environment variables being set
         mock_get_key.return_value = "some_value"
 
-        # Initialize the app and check the returned widget
-        app = JiraTrackerApp()
-        widget = app.build()
-        # Assert that JiraIssueTracker is initialized when env vars are set
-        from jira_issue_tracker import JiraIssueTracker
-
-        self.assertIsInstance(widget, JiraIssueTracker)
+        # Test the logic without creating actual widgets
+        with patch('main.JiraIssueTracker') as mock_tracker:
+            mock_widget = MagicMock()
+            mock_tracker.return_value = mock_widget
+            
+            app = JiraTrackerApp()
+            widget = app.build()
+            
+            # Verify the correct widget was created
+            mock_tracker.assert_called_once()
+            self.assertEqual(widget, mock_widget)
 
 
 if __name__ == "__main__":

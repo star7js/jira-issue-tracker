@@ -35,6 +35,9 @@ jobs:
         pip install -e ".[dev]"
     
     - name: Run tests
+      env:
+        DISPLAY: :99
+        PYTHONPATH: .
       run: |
         pytest test_*.py -v --cov=. --cov-report=xml
     
