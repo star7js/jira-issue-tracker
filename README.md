@@ -73,7 +73,9 @@ cp example.env .env
 You must configure these two fields to connect to your Jira instance:
 
 ```env
-# Your Jira site URL (e.g., https://yourcompany.atlassian.net)
+# Your Jira site URL
+# Cloud: https://yourcompany.atlassian.net
+# Server/Data Center: https://jira.yourcompany.com or https://yourcompany.com/jira
 JIRA_SITE_URL=https://yourcompany.atlassian.net
 
 # Your Jira Personal Access Token (not your password!)
@@ -101,8 +103,19 @@ JQL_QUERY_FOUR=project = ITZ
 JIRA_SERVER=FALSE
 ```
 
+### Jira Deployment Types
+
+This application works with all Jira deployment types:
+
+| Type | URL Format | Description |
+|------|------------|-------------|
+| **Jira Cloud** | `https://yourcompany.atlassian.net` | Hosted by Atlassian |
+| **Jira Server** | `https://jira.yourcompany.com` | Self-hosted on-premises |
+| **Jira Data Center** | `https://yourcompany.com/jira` | Enterprise self-hosted |
+
 ### Jira API Token Setup
 
+**For Jira Cloud:**
 1. **Go to your Atlassian account:**
    - Visit: https://id.atlassian.com/manage-profile/security/api-tokens
    - Or navigate from your Jira instance: Profile Settings → Security → API tokens
@@ -110,6 +123,15 @@ JIRA_SERVER=FALSE
 2. **Create a new API token:**
    - Click "Create API token"
    - Give it a descriptive label (e.g., "Jira Issue Tracker Desktop App")
+   - Copy the generated token
+
+**For Jira Server/Data Center:**
+1. **Go to your Jira instance:**
+   - Navigate to Profile Settings → Security → API tokens
+   - Or use your admin's preferred method for API access
+
+2. **Create a new API token:**
+   - Follow your organization's process for API token creation
    - Copy the generated token
 
 3. **Add to your `.env` file:**
@@ -218,6 +240,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 #### "Unable to connect to Jira"
 - **Solution**: Verify your `JIRA_SITE_URL` is correct (include `https://`)
 - **Check**: Test the URL in your browser to ensure it's accessible
+- **Server/Data Center**: Ensure your Jira instance allows external API access
 
 #### "Authentication failed"
 - **Solution**: Regenerate your API token and update the `.env` file

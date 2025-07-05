@@ -44,7 +44,8 @@ def main():
 
     # Get Jira site URL
     print("\n1. Jira Site URL")
-    print("   Example: https://yourcompany.atlassian.net")
+    print("   Cloud: https://yourcompany.atlassian.net")
+    print("   Server/Data Center: https://jira.yourcompany.com or https://yourcompany.com/jira")
     jira_url = input("   Enter your Jira site URL: ").strip()
 
     if jira_url:
