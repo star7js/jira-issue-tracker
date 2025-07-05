@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - Environment Setup & CI/CD Improvements
+- **Project Renaming**: Renamed from `jira-issue-tracker-server` to `jira-issue-tracker` for better clarity
+- **Interactive Setup**: Added `setup_interactive.py` script for guided configuration
+- **Enhanced Documentation**: Comprehensive setup instructions and troubleshooting guide
+- **Multi-Environment Support**: Clear documentation for Jira Cloud, Server, and Data Center
+- **CI/CD Fixes**: Fixed Kivy window creation issues in headless environments
+- **Environment Configuration**: Enhanced `example.env` with detailed documentation and JQL examples
+- **Better User Experience**: Improved onboarding process for new users
+- **Code Quality**: Maintained consistent formatting and style across all files
+
 ## [0.3.0] - UI/UX Improvements
 - **Better Spacing & Layout**: Increased spacing and padding for improved visual hierarchy
 - **Loading Indicators**: Added spinners and loading states during API calls
