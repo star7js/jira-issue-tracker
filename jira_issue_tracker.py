@@ -12,23 +12,7 @@ if os.environ.get("CI") != "true":
     from kivymd.app import MDApp
     from kivymd.uix.label import MDLabel
 else:
-    # Mock classes for CI environment
-    class MDRaisedButton:
-        def __init__(self, **kwargs):
-            pass
-
-    class MDTooltip:
-        def __init__(self, **kwargs):
-            pass
-
-    class MDApp:
-        @staticmethod
-        def get_running_app():
-            return None
-
-    class MDLabel:
-        def __init__(self, **kwargs):
-            pass
+    from ci_mocks import MDRaisedButton, MDTooltip, MDApp, MDLabel
 
 
 from api import (
@@ -42,12 +26,14 @@ from api import (
 from issue_box import IssueBox
 from jira_connection_settings_popup import open_settings_popup
 
+# UI Constants
+ERROR_COLOR_RED = (1, 0, 0, 1)
+GRID_SPACING = 20
+GRID_PADDING = 20
+
 
 class JiraIssueTracker(GridLayout):
-    # TODO: Fix Service Management Projects, is it JSON differences or is it user roleS? TODO: Let the user select
-    #  TODO: Click to visit hint on the JQL box TODO: Changes to the appearance of the box if desired
-    #   TODO: Complicated filters might need to be referenced by their number, or else we need to format the data (
-    #    regex to change "" to '', others?)
+    """Main Jira Issue Tracker widget that displays issue counts in a grid layout."""
 
     def create_issue_box(self, title, query):
         box = IssueBox(title, query, self.jira_base_url)
@@ -95,7 +81,7 @@ class JiraIssueTracker(GridLayout):
         if not self.jira_site_url:
             error_label = MDLabel(
                 text="⚠️  Error: Jira Site URL is not set. Please configure your connection in settings.",
-                color=(1, 0, 0, 1),
+                color=ERROR_COLOR_RED,
                 halign="center",
                 theme_text_color="Error",
                 font_style="Body1",
@@ -106,8 +92,8 @@ class JiraIssueTracker(GridLayout):
 
     def setup_ui(self):
         self.cols = 2
-        self.spacing = 20  # Increased from 10 for better separation
-        self.padding = 20  # Increased from 10 for better margins
+        self.spacing = GRID_SPACING
+        self.padding = GRID_PADDING
         self.create_issue_boxes()
         Clock.schedule_interval(self.update_labels, DEFAULT_API_REQUEST_INTERVAL)
         self.update_labels(0)

@@ -6,8 +6,9 @@ from security import safe_requests
 # Load environment variables
 load_dotenv()
 
-# Default interval for API requests in seconds
-DEFAULT_API_REQUEST_INTERVAL = 60 * 60  # 1 time per hour
+# Constants
+DEFAULT_API_REQUEST_INTERVAL = 3600  # 1 hour in seconds
+DEFAULT_REQUEST_TIMEOUT = 10  # seconds
 
 # Global constants
 JIRA_SITE_URL = get_key(".env", "JIRA_SITE_URL") or ""
@@ -38,7 +39,7 @@ def execute_request_server(url, headers, query_params):
     """Execute the request and return the response. For server or data center only."""
     try:
         response = safe_requests.get(
-            url, headers=headers, params=query_params, timeout=10
+            url, headers=headers, params=query_params, timeout=DEFAULT_REQUEST_TIMEOUT
         )
         response.raise_for_status()
         return response.json()
@@ -53,13 +54,43 @@ def handle_request_error(error):
         logging.error(f"HTTP error: {error}")
     elif isinstance(error, requests.ConnectionError):
         logging.error("Failed to connect to the server.")
-    # More specific cases can be added as needed
+    elif isinstance(error, requests.Timeout):
+        logging.error("Request timed out.")
+    elif isinstance(error, requests.TooManyRedirects):
+        logging.error("Too many redirects.")
     else:
         logging.error(f"An error occurred: {error}")
 
 
+def validate_jql_query(jql_query):
+    """Validate JQL query before sending to API."""
+    if not jql_query or not isinstance(jql_query, str):
+        logging.warning("Invalid JQL query: must be a non-empty string")
+        return False
+
+    # Strip whitespace
+    jql_query = jql_query.strip()
+
+    if not jql_query:
+        logging.warning("Invalid JQL query: empty after stripping whitespace")
+        return False
+
+    # Check for suspicious patterns that might indicate injection attempts
+    suspicious_patterns = ["';", "--", "/*", "*/", "xp_", "exec(", "eval("]
+    for pattern in suspicious_patterns:
+        if pattern in jql_query.lower():
+            logging.warning(f"Suspicious pattern detected in JQL query: {pattern}")
+            return False
+
+    return True
+
+
 def get_jql_query_results(jql_query):
     """Fetch issue count for a JQL query."""
+    if not validate_jql_query(jql_query):
+        logging.error(f"Invalid JQL query rejected: {jql_query}")
+        return 0
+
     url = create_request_url(JIRA_API_ENDPOINT)
     headers = create_request_headers_server()
     query_params = {"jql": jql_query}

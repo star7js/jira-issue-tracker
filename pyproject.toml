@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [
-    {name = "Josh Simnitt", email = "josh.simnitt@example.com"}
+    {name = "Josh Simnitt"}
 ]
 keywords = ["jira", "issue-tracker", "desktop-app", "kivy", "jql"]
 classifiers = [

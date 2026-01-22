@@ -7,6 +7,12 @@ from requests.adapters import HTTPAdapter
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Constants
+DEFAULT_REQUEST_TIMEOUT = 10  # seconds
+RETRY_TOTAL = 3
+RETRY_BACKOFF_FACTOR = 1
+RETRY_STATUS_CODES = [429, 500, 502, 503, 504]
+
 
 class SafeRequests:
     """A wrapper around requests with additional security and error handling."""
@@ -18,16 +24,16 @@ class SafeRequests:
     def _setup_retry_strategy(self):
         """Setup retry strategy for failed requests."""
         retry_strategy = Retry(
-            total=3,
-            status_forcelist=[429, 500, 502, 503, 504],
+            total=RETRY_TOTAL,
+            status_forcelist=RETRY_STATUS_CODES,
             allowed_methods=["HEAD", "GET", "OPTIONS"],
-            backoff_factor=1,
+            backoff_factor=RETRY_BACKOFF_FACTOR,
         )
         adapter = HTTPAdapter(max_retries=retry_strategy)
         self.session.mount("http://", adapter)
         self.session.mount("https://", adapter)
 
-    def get(self, url, headers=None, params=None, timeout=10, **kwargs):
+    def get(self, url, headers=None, params=None, timeout=DEFAULT_REQUEST_TIMEOUT, **kwargs):
         """Perform a GET request with security measures."""
         try:
             # Validate URL
@@ -56,7 +62,7 @@ class SafeRequests:
             logger.error(f"Unexpected error during request: {e}")
             raise
 
-    def post(self, url, headers=None, data=None, json=None, timeout=10, **kwargs):
+    def post(self, url, headers=None, data=None, json=None, timeout=DEFAULT_REQUEST_TIMEOUT, **kwargs):
         """Perform a POST request with security measures."""
         try:
             # Validate URL

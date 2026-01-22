@@ -7,21 +7,7 @@ if os.environ.get("CI") != "true":
     from jira_issue_tracker import JiraIssueTracker
     from jira_connection_settings_popup import JiraConnectionSettingsPopup
 else:
-    # Mock classes for CI environment
-    class MDApp:
-        def __init__(self):
-            pass
-
-        def run(self):
-            pass
-
-    class JiraIssueTracker:
-        def __init__(self):
-            pass
-
-    class JiraConnectionSettingsPopup:
-        def __init__(self):
-            pass
+    from ci_mocks import MDApp, JiraIssueTracker, JiraConnectionSettingsPopup
 
 
 class JiraTrackerApp(MDApp):
