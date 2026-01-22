@@ -4,89 +4,109 @@
 
 <img src="https://github.com/star7js/jira-issue-tracker/assets/126814341/6b9d8d3e-f3ce-4d8d-a99d-2be30f33c757.png" width="50%" height="50%">
 
-Desktop application for tracking Jira issues with custom JQL queries. Built with Kivy/KivyMD.
+A lightweight desktop widget for tracking Jira issues at a glance. Monitor critical tasks without switching to your browser.
+
+## Why This Tool?
+
+Stop context-switching between browser tabs to check Jira. This desktop app:
+- **Always visible**: Sits on your desktop like a sticky note
+- **Auto-refreshes**: Updates every hour automatically
+- **Customizable**: Track exactly what matters with JQL queries
+- **Fast**: Click to open any issue in your browser instantly
+- **Private**: Direct API connection, no third-party services
+
+Perfect for developers, project managers, and support engineers who need real-time visibility into their Jira workspace.
 
 ## Features
 
-- Custom JQL query tracking with auto-refresh (1 hour)
-- Direct navigation to Jira from issue boxes
-- Light/dark mode toggle
-- Secure API requests with retry logic
-- Supports Jira Cloud, Server, and Data Center
+- **Custom JQL Queries**: Track up to 4 different queries simultaneously
+- **Auto-Refresh**: Updates every hour, no manual refresh needed
+- **One-Click Navigation**: Click any issue box to open in browser
+- **Light/Dark Mode**: Match your system theme
+- **Secure**: Direct API connection with retry logic and error handling
+- **Universal Support**: Works with Jira Cloud, Server, and Data Center
+
+## Platform Support
+
+- ✅ **Windows** 10/11
+- ✅ **macOS** 10.15+
+- ✅ **Linux** (Ubuntu, Fedora, Arch)
 
 ## Installation
 
-Requires Python 3.9+
+**Requirements:** Python 3.9+
 
+### From PyPI (Recommended)
 ```bash
-# From PyPI
 pip install jira-issue-tracker
+jira-tracker
+```
 
-# From source
+### From Source
+```bash
 git clone https://github.com/star7js/jira-issue-tracker.git
 cd jira-issue-tracker
 pip install -e .
+python main.py
 ```
 
-## Configuration
+## Quick Setup
 
-### Quick Setup (Recommended)
-
+### Interactive Setup (Easiest)
 ```bash
 python setup_interactive.py
 ```
 
+Follow the prompts to configure your Jira connection.
+
 ### Manual Setup
 
 1. Copy `example.env` to `.env`
-2. Edit `.env` with your Jira configuration:
+2. Get your API token:
+   - **Jira Cloud**: Visit [API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
+   - **Jira Server/Data Center**: Follow your organization's process
+3. Edit `.env`:
 
 ```env
-# Required: Your Jira URL
+# Your Jira URL (include https://)
 JIRA_SITE_URL=https://yourcompany.atlassian.net
 
-# Required: Your API token (not password!)
+# Your API token (NOT your password!)
 JIRA_API_TOKEN=your_token_here
 
-# Optional: Custom JQL queries
-JQL_QUERY_ONE=project = DEMO
-JQL_QUERY_TWO=assignee = currentUser()
-JQL_QUERY_THREE=reporter = currentUser() ORDER BY created DESC
-JQL_QUERY_FOUR=priority = High
+# Optional: Customize your queries
+JQL_QUERY_ONE=assignee = currentUser() AND status != Done
+JQL_QUERY_TWO=project = MYPROJECT AND priority = High
+JQL_QUERY_THREE=created >= -7d ORDER BY created DESC
+JQL_QUERY_FOUR=reporter = currentUser()
 ```
 
-### Getting Your API Token
+## Deployment Types
 
-**Jira Cloud:**
-1. Visit https://id.atlassian.com/manage-profile/security/api-tokens
-2. Create a new token and copy it
-
-**Jira Server/Data Center:**
-- Follow your organization's API token creation process
-
-### Deployment Types
-
-| Type | URL Format |
-|------|------------|
+| Type | Example URL |
+|------|-------------|
 | Jira Cloud | `https://yourcompany.atlassian.net` |
 | Jira Server | `https://jira.yourcompany.com` |
 | Jira Data Center | `https://yourcompany.com/jira` |
 
-### JQL Query Examples
+## JQL Query Examples
 
-| Query | JQL |
-|-------|-----|
-| Project issues | `project = DEMO` |
-| Assigned to me | `assignee = currentUser()` |
-| My reports | `reporter = currentUser()` |
-| High priority | `priority = High` |
-| Recent issues | `created >= -7d` |
-| Open issues | `status != Done` |
+Track what matters most to you:
 
-[JQL Documentation](https://support.atlassian.com/jira-software-cloud/docs/use-advanced-search-with-jira-query-language-jql/)
+| Use Case | JQL Query |
+|----------|-----------|
+| My open tasks | `assignee = currentUser() AND status != Done` |
+| Team blockers | `project = MYPROJECT AND status = Blocked` |
+| Recent bugs | `type = Bug AND created >= -7d ORDER BY created DESC` |
+| High priority | `priority IN (Highest, High) AND status != Done` |
+| My reports | `reporter = currentUser() ORDER BY created DESC` |
+| Sprint issues | `sprint in openSprints()` |
+
+[Full JQL Documentation](https://support.atlassian.com/jira-software-cloud/docs/use-advanced-search-with-jira-query-language-jql/)
 
 ## Usage
 
+Launch the tracker:
 ```bash
 # If installed via pip
 jira-tracker
@@ -95,33 +115,67 @@ jira-tracker
 python main.py
 ```
 
-On first run, configure your Jira connection if `.env` is not set up.
+**First Run:** If `.env` isn't configured, you'll be prompted to set up your connection.
+
+**Features:**
+- Click any issue to open in browser
+- Auto-refreshes every hour
+- Toggle light/dark mode in settings
+- Queries update automatically
+
+## Compared To...
+
+| Feature | Browser Tabs | Desktop Notifications | This Tool |
+|---------|-------------|----------------------|-----------|
+| Always visible | ❌ | ⚠️ Temporary | ✅ Persistent |
+| Multiple queries | ❌ Manual | ❌ | ✅ Auto-refresh |
+| Low CPU usage | ❌ Heavy | ✅ | ✅ Lightweight |
+| Custom JQL | ✅ | ❌ | ✅ Full support |
+| Offline mode | ❌ | ❌ | ⚠️ Shows last data |
 
 ## Development
 
 ```bash
-# Install dev dependencies
+# Install with dev dependencies
 pip install -e ".[dev]"
 
 # Run tests
 pytest
 
-# Run tests with coverage
+# Run with coverage
 pytest --cov=. --cov-report=html --cov-report=term-missing
 
 # Format code
 black .
+
+# Project structure
+├── main.py                              # Entry point
+├── jira_issue_tracker.py               # Main app logic
+├── api.py                              # Jira API wrapper
+├── issue_box.py                        # Issue display widget
+├── jira_connection_settings_popup.py   # Configuration UI
+└── tests/                              # Test suite
 ```
 
 ## Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| "Key JIRA_SITE_URL not found" | Copy `example.env` to `.env` and configure |
-| "Unable to connect" | Verify URL includes `https://` and is accessible |
-| "Authentication failed" | Regenerate API token (use token, not password) |
-| "No issues found" | Test JQL query directly in Jira |
-| KivyMD warning | Safe to ignore, doesn't affect functionality |
+| "Key JIRA_SITE_URL not found" | Run `python setup_interactive.py` or copy `example.env` to `.env` |
+| "Unable to connect" | Verify URL includes `https://` and is accessible in browser |
+| "Authentication failed" | Regenerate API token - use token, NOT password |
+| "No issues found" | Test your JQL query directly in Jira to verify it works |
+| Issues not updating | Check network connection, app auto-refreshes every hour |
+| KivyMD warnings in console | Safe to ignore - doesn't affect functionality |
+| Blank screen on start | Ensure `.env` is configured correctly |
+
+## Roadmap
+
+- [ ] Configurable refresh interval
+- [ ] Desktop notifications for new issues
+- [ ] Issue quick actions (comment, transition)
+- [ ] Multiple workspaces support
+- [ ] System tray mode
 
 ## License
 
