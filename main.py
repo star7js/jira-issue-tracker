@@ -1,5 +1,9 @@
 import os
 from dotenv import get_key
+from env_validator import validate_env_file, validate_jira_url
+from logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # Conditional imports for CI environment
 if os.environ.get("CI") != "true":
@@ -12,15 +16,21 @@ else:
 
 class JiraTrackerApp(MDApp):
     def build(self):
-        # Check if environment variables are set
-        jira_site_url = get_key(".env", "JIRA_SITE_URL")
+        # Validate .env file exists and has required variables
+        is_valid, missing_vars = validate_env_file()
 
-        if not jira_site_url:
-            # If environment variables are not set, show settings popup
+        if not is_valid:
+            logger.warning(f"Environment validation failed: {missing_vars}")
             return JiraConnectionSettingsPopup()
-        else:
-            # If environment variables are set, show the main tracker
-            return JiraIssueTracker()
+
+        # Validate Jira URL format
+        jira_site_url = get_key(".env", "JIRA_SITE_URL")
+        if not validate_jira_url(jira_site_url):
+            logger.warning(f"Invalid Jira URL format: {jira_site_url}")
+            return JiraConnectionSettingsPopup()
+
+        # If environment variables are set and valid, show the main tracker
+        return JiraIssueTracker()
 
 
 def main():

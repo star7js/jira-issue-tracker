@@ -1,5 +1,7 @@
 # Jira Issue Tracker
 
+[![codecov](https://codecov.io/gh/star7js/jira-issue-tracker/branch/main/graph/badge.svg)](https://codecov.io/gh/star7js/jira-issue-tracker)
+
 <img src="https://github.com/star7js/jira-issue-tracker/assets/126814341/6b9d8d3e-f3ce-4d8d-a99d-2be30f33c757.png" width="50%" height="50%">
 
 Desktop application for tracking Jira issues with custom JQL queries. Built with Kivy/KivyMD.
@@ -103,6 +105,9 @@ pip install -e ".[dev]"
 
 # Run tests
 pytest
+
+# Run tests with coverage
+pytest --cov=. --cov-report=html --cov-report=term-missing
 
 # Format code
 black .

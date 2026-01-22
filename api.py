@@ -1,10 +1,14 @@
+from typing import Dict, Optional, Any
 import requests
-import logging
 from dotenv import load_dotenv, get_key
 from security import safe_requests
+from logging_config import get_logger
 
 # Load environment variables
 load_dotenv()
+
+# Configure logging
+logger = get_logger(__name__)
 
 # Constants
 DEFAULT_API_REQUEST_INTERVAL = 3600  # 1 hour in seconds
@@ -21,21 +25,20 @@ JQL_QUERY_TWO = get_key(".env", "JQL_QUERY_TWO") or ""
 JQL_QUERY_THREE = get_key(".env", "JQL_QUERY_THREE") or ""
 JQL_QUERY_FOUR = get_key(".env", "JQL_QUERY_FOUR") or ""
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
 
-
-def create_request_url(endpoint):
+def create_request_url(endpoint: str) -> str:
     """Create the full request URL."""
     return f"{JIRA_SITE_URL}{endpoint}"
 
 
-def create_request_headers_server():
+def create_request_headers_server() -> Dict[str, str]:
     """Create the request headers. For server or data center only."""
     return {"Authorization": f"Bearer {JIRA_API_TOKEN}"}
 
 
-def execute_request_server(url, headers, query_params):
+def execute_request_server(
+    url: str, headers: Dict[str, str], query_params: Dict[str, str]
+) -> Optional[Dict[str, Any]]:
     """Execute the request and return the response. For server or data center only."""
     try:
         response = safe_requests.get(
@@ -48,47 +51,47 @@ def execute_request_server(url, headers, query_params):
         return None
 
 
-def handle_request_error(error):
+def handle_request_error(error: requests.RequestException) -> None:
     """Handle different types of request errors."""
     if isinstance(error, requests.HTTPError):
-        logging.error(f"HTTP error: {error}")
+        logger.error(f"HTTP error: {error}")
     elif isinstance(error, requests.ConnectionError):
-        logging.error("Failed to connect to the server.")
+        logger.error("Failed to connect to the server.")
     elif isinstance(error, requests.Timeout):
-        logging.error("Request timed out.")
+        logger.error("Request timed out.")
     elif isinstance(error, requests.TooManyRedirects):
-        logging.error("Too many redirects.")
+        logger.error("Too many redirects.")
     else:
-        logging.error(f"An error occurred: {error}")
+        logger.error(f"An error occurred: {error}")
 
 
-def validate_jql_query(jql_query):
+def validate_jql_query(jql_query: str) -> bool:
     """Validate JQL query before sending to API."""
     if not jql_query or not isinstance(jql_query, str):
-        logging.warning("Invalid JQL query: must be a non-empty string")
+        logger.warning("Invalid JQL query: must be a non-empty string")
         return False
 
     # Strip whitespace
     jql_query = jql_query.strip()
 
     if not jql_query:
-        logging.warning("Invalid JQL query: empty after stripping whitespace")
+        logger.warning("Invalid JQL query: empty after stripping whitespace")
         return False
 
     # Check for suspicious patterns that might indicate injection attempts
     suspicious_patterns = ["';", "--", "/*", "*/", "xp_", "exec(", "eval("]
     for pattern in suspicious_patterns:
         if pattern in jql_query.lower():
-            logging.warning(f"Suspicious pattern detected in JQL query: {pattern}")
+            logger.warning(f"Suspicious pattern detected in JQL query: {pattern}")
             return False
 
     return True
 
 
-def get_jql_query_results(jql_query):
+def get_jql_query_results(jql_query: str) -> int:
     """Fetch issue count for a JQL query."""
     if not validate_jql_query(jql_query):
-        logging.error(f"Invalid JQL query rejected: {jql_query}")
+        logger.error(f"Invalid JQL query rejected: {jql_query}")
         return 0
 
     url = create_request_url(JIRA_API_ENDPOINT)
@@ -102,4 +105,4 @@ def get_jql_query_results(jql_query):
 if __name__ == "__main__":
     jql_query = "project = TEST"
     result = get_jql_query_results(jql_query)
-    logging.info(f"Query Result: {result}")
+    logger.info(f"Query Result: {result}")

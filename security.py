@@ -1,11 +1,11 @@
+from typing import Optional, Dict, Any
 import requests
-import logging
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
+from logging_config import get_logger
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Constants
 DEFAULT_REQUEST_TIMEOUT = 10  # seconds
@@ -17,11 +17,11 @@ RETRY_STATUS_CODES = [429, 500, 502, 503, 504]
 class SafeRequests:
     """A wrapper around requests with additional security and error handling."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.session = requests.Session()
         self._setup_retry_strategy()
 
-    def _setup_retry_strategy(self):
+    def _setup_retry_strategy(self) -> None:
         """Setup retry strategy for failed requests."""
         retry_strategy = Retry(
             total=RETRY_TOTAL,
@@ -33,7 +33,14 @@ class SafeRequests:
         self.session.mount("http://", adapter)
         self.session.mount("https://", adapter)
 
-    def get(self, url, headers=None, params=None, timeout=DEFAULT_REQUEST_TIMEOUT, **kwargs):
+    def get(
+        self,
+        url: str,
+        headers: Optional[Dict[str, str]] = None,
+        params: Optional[Dict[str, Any]] = None,
+        timeout: int = DEFAULT_REQUEST_TIMEOUT,
+        **kwargs: Any,
+    ) -> requests.Response:
         """Perform a GET request with security measures."""
         try:
             # Validate URL
@@ -62,7 +69,15 @@ class SafeRequests:
             logger.error(f"Unexpected error during request: {e}")
             raise
 
-    def post(self, url, headers=None, data=None, json=None, timeout=DEFAULT_REQUEST_TIMEOUT, **kwargs):
+    def post(
+        self,
+        url: str,
+        headers: Optional[Dict[str, str]] = None,
+        data: Optional[Any] = None,
+        json: Optional[Dict[str, Any]] = None,
+        timeout: int = DEFAULT_REQUEST_TIMEOUT,
+        **kwargs: Any,
+    ) -> requests.Response:
         """Perform a POST request with security measures."""
         try:
             # Validate URL
