@@ -22,10 +22,16 @@ class TestJiraTrackerApp(unittest.TestCase):
             mock_popup.assert_called_once()
             self.assertEqual(widget, mock_widget)
 
+    @patch("main.validate_jira_url")
+    @patch("main.validate_env_file")
     @patch("main.get_key")
-    def test_environment_variables_set(self, mock_get_key):
-        # Simulate environment variables being set
-        mock_get_key.return_value = "some_value"
+    def test_environment_variables_set(
+        self, mock_get_key, mock_validate_env, mock_validate_url
+    ):
+        # Simulate environment variables being set and validation passing
+        mock_get_key.return_value = "https://jira.example.com"
+        mock_validate_env.return_value = (True, [])
+        mock_validate_url.return_value = True
 
         # Test the logic without creating actual widgets
         with patch("main.JiraIssueTracker") as mock_tracker:
