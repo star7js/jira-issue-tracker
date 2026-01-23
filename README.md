@@ -125,7 +125,7 @@ Launch the tracker:
 jira-tracker
 
 # Or from source
-python main.py
+python run.py
 ```
 
 **First Run:** If `.env` isn't configured, you'll be prompted to set up your connection.
@@ -158,19 +158,24 @@ pip install -e ".[dev]"
 pytest
 
 # Run with coverage
-pytest --cov=. --cov-report=html --cov-report=term-missing
+pytest --cov=src/jira_tracker --cov-report=html --cov-report=term-missing
 
 # Format code
 black .
 
 # Project structure
-├── main.py                              # Entry point
-├── jira_issue_tracker.py               # Main app logic
-├── api.py                              # Jira API wrapper
-├── issue_box.py                        # Issue display widget (gradient cards)
-├── jira_connection_settings_popup.py   # Configuration UI
-├── icon.png                            # Custom app icon
-└── tests/                              # Test suite
+├── src/
+│   └── jira_tracker/                   # Main package
+│       ├── main.py                     # Entry point
+│       ├── jira_issue_tracker.py       # Main app logic
+│       ├── api.py                      # Jira API wrapper
+│       ├── issue_box.py                # Gradient card widgets
+│       ├── jira_connection_settings_popup.py  # Settings UI
+│       └── ...                         # Other modules
+├── tests/                               # Test suite
+├── run.py                               # Convenience launcher
+├── setup_interactive.py                 # Interactive setup
+└── icon.png                             # Custom app icon
 ```
 
 ## Troubleshooting
