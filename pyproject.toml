@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jira-issue-tracker"
-version = "0.4.0"
+version = "0.5.0"
 description = "A Kivy-based desktop application for tracking Jira issues with custom JQL queries"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -49,12 +49,15 @@ Repository = "https://github.com/star7js/jira-issue-tracker"
 Issues = "https://github.com/star7js/jira-issue-tracker/issues"
 
 [project.scripts]
-jira-tracker = "main:main"
+jira-tracker = "jira_tracker.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["*.py"]
-exclude = ["tests*", "test_*"]
+where = ["src"]
+include = ["jira_tracker*"]
+exclude = ["tests*"]
 
 [tool.black]
 line-length = 88
@@ -75,8 +78,9 @@ extend-exclude = '''
 '''
 
 [tool.pytest.ini_options]
-testpaths = ["test_*.py"]
+testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --tb=short"
+pythonpath = ["src"]

@@ -17,7 +17,7 @@ else:
     from ci_mocks import MDRaisedButton, MDTooltip, MDApp, MDLabel
 
 
-from api import (
+from .api import (
     get_jql_query_results,
     DEFAULT_API_REQUEST_INTERVAL,
     JQL_QUERY_ONE,
@@ -25,8 +25,8 @@ from api import (
     JQL_QUERY_THREE,
     JQL_QUERY_FOUR,
 )
-from issue_box import IssueBox
-from jira_connection_settings_popup import open_settings_popup, open_query_editor
+from .issue_box import IssueBox
+from .jira_connection_settings_popup import open_settings_popup, open_query_editor
 
 # UI Constants - Dashboard widget styling
 ERROR_COLOR_RED = (1, 0, 0, 1)

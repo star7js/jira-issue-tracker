@@ -1,17 +1,17 @@
 import os
 from dotenv import get_key
-from env_validator import validate_env_file, validate_jira_url
-from logging_config import get_logger
+from .env_validator import validate_env_file, validate_jira_url
+from .logging_config import get_logger
 
 logger = get_logger(__name__)
 
 # Conditional imports for CI environment
 if os.environ.get("CI") != "true":
     from kivymd.app import MDApp
-    from jira_issue_tracker import JiraIssueTracker
-    from jira_connection_settings_popup import JiraConnectionSettingsPopup
+    from .jira_issue_tracker import JiraIssueTracker
+    from .jira_connection_settings_popup import JiraConnectionSettingsPopup
 else:
-    from ci_mocks import MDApp, JiraIssueTracker, JiraConnectionSettingsPopup
+    from .ci_mocks import MDApp, JiraIssueTracker, JiraConnectionSettingsPopup
 
 
 class JiraTrackerApp(MDApp):

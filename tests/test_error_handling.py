@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from jira_issue_tracker import JiraIssueTracker
+from jira_tracker.jira_issue_tracker import JiraIssueTracker
 from requests.exceptions import RequestException
 
 
@@ -17,14 +17,14 @@ class TestErrorHandling(unittest.TestCase):
 
     def test_missing_jira_site_url_shows_error_label(self):
         """Test that missing Jira site URL shows an error label."""
-        with patch("jira_issue_tracker.get_key", return_value=None):
+        with patch("jira_tracker.jira_issue_tracker.get_key", return_value=None):
             # Test the logic without creating the full widget to avoid KivyMD context issues
             tracker = JiraIssueTracker.__new__(JiraIssueTracker)
             tracker.jira_site_url = None
             tracker.jira_base_url = None
 
             # Mock the MDLabel creation to avoid KivyMD context issues
-            with patch("jira_issue_tracker.MDLabel") as mock_mdlabel:
+            with patch("jira_tracker.jira_issue_tracker.MDLabel") as mock_mdlabel:
                 mock_label = MagicMock()
                 mock_mdlabel.return_value = mock_label
 
@@ -37,13 +37,13 @@ class TestErrorHandling(unittest.TestCase):
                         mock_add_widget.assert_called_once_with(mock_label)
 
     @patch(
-        "jira_issue_tracker.get_jql_query_results",
+        "jira_tracker.jira_issue_tracker.get_jql_query_results",
         side_effect=RequestException("API Error"),
     )
     def test_api_error_handling_logic(self, mock_get_results):
         """Test that API errors are handled gracefully in the logic."""
         # Test the error handling logic without creating UI components
-        with patch("jira_issue_tracker.get_key", return_value="https://test-jira.com"):
+        with patch("jira_tracker.jira_issue_tracker.get_key", return_value="https://test-jira.com"):
             # Create tracker but don't call setup_ui to avoid KivyMD context issues
             tracker = JiraIssueTracker.__new__(JiraIssueTracker)
             tracker.boxes = []
@@ -54,7 +54,7 @@ class TestErrorHandling(unittest.TestCase):
             tracker.boxes = [mock_box]
 
             # Test the update_labels method directly
-            with patch("jira_issue_tracker.get_key", return_value="TRUE"):
+            with patch("jira_tracker.jira_issue_tracker.get_key", return_value="TRUE"):
                 tracker.update_labels(0)
                 # Verify that the box's update_label_error was called with error message
                 mock_box.update_label_error.assert_called_with("Connection Error")

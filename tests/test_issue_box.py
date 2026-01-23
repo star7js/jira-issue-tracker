@@ -1,17 +1,17 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from main import JiraTrackerApp
+from jira_tracker.main import JiraTrackerApp
 
 
 class TestJiraTrackerApp(unittest.TestCase):
 
-    @patch("main.get_key")
+    @patch("jira_tracker.main.get_key")
     def test_environment_variables_not_set(self, mock_get_key):
         # Simulate environment variables not being set
         mock_get_key.return_value = None
 
         # Test the logic without creating actual widgets
-        with patch("main.JiraConnectionSettingsPopup") as mock_popup:
+        with patch("jira_tracker.main.JiraConnectionSettingsPopup") as mock_popup:
             mock_widget = MagicMock()
             mock_popup.return_value = mock_widget
 
@@ -22,9 +22,9 @@ class TestJiraTrackerApp(unittest.TestCase):
             mock_popup.assert_called_once()
             self.assertEqual(widget, mock_widget)
 
-    @patch("main.validate_jira_url")
-    @patch("main.validate_env_file")
-    @patch("main.get_key")
+    @patch("jira_tracker.main.validate_jira_url")
+    @patch("jira_tracker.main.validate_env_file")
+    @patch("jira_tracker.main.get_key")
     def test_environment_variables_set(
         self, mock_get_key, mock_validate_env, mock_validate_url
     ):
@@ -34,7 +34,7 @@ class TestJiraTrackerApp(unittest.TestCase):
         mock_validate_url.return_value = True
 
         # Test the logic without creating actual widgets
-        with patch("main.JiraIssueTracker") as mock_tracker:
+        with patch("jira_tracker.main.JiraIssueTracker") as mock_tracker:
             mock_widget = MagicMock()
             mock_tracker.return_value = mock_widget
 

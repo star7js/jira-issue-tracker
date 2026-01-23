@@ -50,7 +50,7 @@ jira-tracker
 git clone https://github.com/star7js/jira-issue-tracker.git
 cd jira-issue-tracker
 pip install -e .
-python main.py
+python run.py
 ```
 
 ## Quick Setup

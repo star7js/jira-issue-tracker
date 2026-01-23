@@ -2,7 +2,7 @@ from typing import Optional, Dict, Any
 import requests
 from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
-from logging_config import get_logger
+from .logging_config import get_logger
 
 # Configure logging
 logger = get_logger(__name__)

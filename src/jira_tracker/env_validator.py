@@ -2,7 +2,7 @@
 
 import os
 from typing import List, Tuple
-from logging_config import get_logger
+from .logging_config import get_logger
 
 logger = get_logger(__name__)
 

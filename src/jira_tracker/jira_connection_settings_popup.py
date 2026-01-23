@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv, set_key, find_dotenv, get_key
-from logging_config import get_logger
+from .logging_config import get_logger
 
 logger = get_logger(__name__)
 

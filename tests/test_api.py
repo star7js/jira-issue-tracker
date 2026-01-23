@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import patch, MagicMock
-import api
+from jira_tracker import api
 
 
 class TestJiraAPIProgram(unittest.TestCase):
 
-    @patch("api.load_dotenv")
+    @patch("jira_tracker.api.load_dotenv")
     def test_load_env_variables(self, mock_load_dotenv):
         api.load_dotenv()
         mock_load_dotenv.assert_called_once()
@@ -19,14 +19,14 @@ class TestJiraAPIProgram(unittest.TestCase):
         expected_headers = {"Authorization": f"Bearer {api.JIRA_API_TOKEN}"}
         self.assertEqual(api.create_request_headers_server(), expected_headers)
 
-    @patch("api.safe_requests.get")
+    @patch("jira_tracker.api.safe_requests.get")
     def test_execute_request_server_success(self, mock_get):
         mock_get.return_value = MagicMock(status_code=200, json=lambda: {"total": 42})
         response = api.execute_request_server("http://test.com", {}, {})
         self.assertIsNotNone(response)
         self.assertEqual(response, {"total": 42})
 
-    @patch("api.safe_requests.get")
+    @patch("jira_tracker.api.safe_requests.get")
     def test_execute_request_server_failure(self, mock_get):
         mock_get.side_effect = api.requests.HTTPError()
         response = api.execute_request_server("http://test.com", {}, {})

@@ -2,8 +2,8 @@ from typing import Dict, Optional, Any
 import base64
 import requests
 from dotenv import load_dotenv, get_key
-from security import safe_requests
-from logging_config import get_logger
+from .security import safe_requests
+from .logging_config import get_logger
 
 # Load environment variables
 load_dotenv()
