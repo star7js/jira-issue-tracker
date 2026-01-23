@@ -16,6 +16,7 @@ else:
 
 class JiraTrackerApp(MDApp):
     title = "Jira Tracker"  # Clean title without "App" suffix
+    icon = "icon.png"  # Custom app icon
 
     def build(self):
         # Configure window appearance
@@ -23,7 +24,7 @@ class JiraTrackerApp(MDApp):
         from kivy.utils import get_color_from_hex
 
         # Set window size (optimal proportions)
-        Window.size = (620, 580)
+        Window.size = (620, 540)
         Window.minimum_width = 580
         Window.minimum_height = 540
 

@@ -125,9 +125,9 @@ class JiraIssueTracker(GridLayout):
         button_box = MDBoxLayout(
             orientation="horizontal",
             size_hint=(1, None),
-            height="44dp",
+            height="40dp",
             spacing="16dp",
-            padding=["12dp", "4dp", "12dp", "4dp"],
+            padding=["12dp", "0dp", "12dp", "4dp"],
         )
 
         # Theme switcher button
@@ -166,13 +166,15 @@ class JiraIssueTracker(GridLayout):
         )
         settings_btn.bind(on_press=open_settings_popup)
 
-        # Add spacer to push buttons to the right
-        button_box.add_widget(MDLabel(text=""))  # Spacer
+        # Add buttons to the box
         button_box.add_widget(theme_btn)
         button_box.add_widget(query_btn)
         button_box.add_widget(refresh_btn)
         button_box.add_widget(settings_btn)
 
+        # Add empty left column spacer to push button_box to right column
+        from kivy.uix.widget import Widget
+        self.add_widget(Widget())
         self.add_widget(button_box)
 
     def create_user_settings_button(self):
@@ -200,9 +202,6 @@ class JiraIssueTracker(GridLayout):
                 # Update icon if it changed
                 if hasattr(box, 'icon_label') and box.icon_label:
                     box.icon_label.icon = box.gradient_colors["icon"]
-
-        # Show brief notification of theme change
-        print(f"Theme changed to: {new_theme_name}")
 
     def toggle_mode(self, instance):
         app = MDApp.get_running_app()

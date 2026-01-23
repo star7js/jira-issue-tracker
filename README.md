@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/star7js/jira-issue-tracker/branch/main/graph/badge.svg)](https://codecov.io/gh/star7js/jira-issue-tracker)
 
-<img src="https://github.com/star7js/jira-issue-tracker/assets/126814341/6b9d8d3e-f3ce-4d8d-a99d-2be30f33c757.png" width="50%" height="50%">
+<img src="screenshots/app-screenshot.png" width="70%" alt="Jira Tracker App Screenshot">
 
 A lightweight desktop widget for tracking Jira issues at a glance. Monitor critical tasks without switching to your browser.
 
@@ -10,6 +10,7 @@ A lightweight desktop widget for tracking Jira issues at a glance. Monitor criti
 
 Stop context-switching between browser tabs to check Jira. This desktop app:
 - **Always visible**: Sits on your desktop like a sticky note
+- **Beautiful UI**: Modern gradient cards with 5 stunning themes
 - **Auto-refreshes**: Updates every hour automatically
 - **Customizable**: Track exactly what matters with JQL queries
 - **Fast**: Click to open any issue in your browser instantly
@@ -19,10 +20,12 @@ Perfect for developers, project managers, and support engineers who need real-ti
 
 ## Features
 
+- **Modern Gradient UI**: Beautiful gradient cards with smooth hover effects
+- **Theme Cycling**: 5 stunning themes (Default, Ocean, Sunset, Forest, Nord)
 - **Custom JQL Queries**: Track up to 4 different queries simultaneously
 - **Auto-Refresh**: Updates every hour, no manual refresh needed
 - **One-Click Navigation**: Click any issue box to open in browser
-- **Light/Dark Mode**: Match your system theme
+- **Custom App Icon**: Professional icon with Jira-themed design
 - **Secure**: Direct API connection with retry logic and error handling
 - **Universal Support**: Works with Jira Cloud, Server, and Data Center
 
@@ -79,6 +82,9 @@ JQL_QUERY_ONE=assignee = currentUser() AND status != Done
 JQL_QUERY_TWO=project = MYPROJECT AND priority = High
 JQL_QUERY_THREE=created >= -7d ORDER BY created DESC
 JQL_QUERY_FOUR=reporter = currentUser()
+
+# Optional: Set your preferred theme (Default, Ocean, Sunset, Forest, Nord)
+THEME_PREFERENCE=Default
 ```
 
 ## Deployment Types
@@ -117,11 +123,13 @@ python main.py
 
 **First Run:** If `.env` isn't configured, you'll be prompted to set up your connection.
 
-**Features:**
-- Click any issue to open in browser
-- Auto-refreshes every hour
-- Toggle light/dark mode in settings
-- Queries update automatically
+**Controls:**
+- **Click any card**: Open issues in browser
+- **Palette icon** (🎨): Cycle through 5 beautiful themes
+- **Pencil icon** (✏️): Edit your JQL queries
+- **Refresh icon** (🔄): Manually refresh issue counts
+- **Settings icon** (⚙️): Configure Jira connection
+- **Auto-refresh**: Updates every hour automatically
 
 ## Compared To...
 
@@ -152,8 +160,9 @@ black .
 ├── main.py                              # Entry point
 ├── jira_issue_tracker.py               # Main app logic
 ├── api.py                              # Jira API wrapper
-├── issue_box.py                        # Issue display widget
+├── issue_box.py                        # Issue display widget (gradient cards)
 ├── jira_connection_settings_popup.py   # Configuration UI
+├── icon.png                            # Custom app icon
 └── tests/                              # Test suite
 ```
 

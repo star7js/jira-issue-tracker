@@ -1,5 +1,8 @@
 import os
 from dotenv import load_dotenv, set_key, find_dotenv, get_key
+from logging_config import get_logger
+
+logger = get_logger(__name__)
 
 # Conditional imports for CI environment
 if os.environ.get("CI") != "true":
@@ -124,8 +127,7 @@ class JiraConnectionSettingsPopup(MDDialog):
             self.dismiss()
             MDApp.get_running_app().stop()
         except Exception as e:
-            # Handle exceptions, potentially logging them or notifying the user
-            print(e)
+            logger.error(f"Error saving settings: {e}")
             self.dismiss()
 
 
@@ -216,7 +218,7 @@ class JiraQueryEditorPopup(MDDialog):
             self.dismiss()
             MDApp.get_running_app().stop()
         except Exception as e:
-            print(f"Error saving queries: {e}")
+            logger.error(f"Error saving queries: {e}")
             self.dismiss()
 
 

@@ -236,7 +236,6 @@ class IssueBox(MDCard):
         if self.collide_point(*touch.pos):
             jira_url = f"{self.jira_base_url}?jql={urllib.parse.quote(self.jql_query)}"
             webbrowser.open(jira_url)
-            print("User Clicked:", jira_url)
 
     def update_label(self, count):
         """Updates the issue count label with animation."""
