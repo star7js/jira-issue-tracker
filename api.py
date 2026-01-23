@@ -1,4 +1,5 @@
 from typing import Dict, Optional, Any
+import base64
 import requests
 from dotenv import load_dotenv, get_key
 from security import safe_requests
@@ -16,8 +17,11 @@ DEFAULT_REQUEST_TIMEOUT = 10  # seconds
 
 # Global constants
 JIRA_SITE_URL = get_key(".env", "JIRA_SITE_URL") or ""
+JIRA_EMAIL = get_key(".env", "JIRA_EMAIL") or ""
 JIRA_API_TOKEN = get_key(".env", "JIRA_API_TOKEN") or ""
-JIRA_API_ENDPOINT = "/rest/api/latest/search"
+# Use API v3 search/approximate-count for Cloud (POST), v2 search for Server (GET)
+JIRA_API_ENDPOINT_CLOUD = "/rest/api/3/search/approximate-count"
+JIRA_API_ENDPOINT_SERVER = "/rest/api/2/search"
 
 # JQL Queries from .env file with defaults
 JQL_QUERY_ONE = get_key(".env", "JQL_QUERY_ONE") or ""
@@ -36,6 +40,18 @@ def create_request_headers_server() -> Dict[str, str]:
     return {"Authorization": f"Bearer {JIRA_API_TOKEN}"}
 
 
+def create_request_headers_cloud() -> Dict[str, str]:
+    """Create the request headers for Jira Cloud using Basic Auth."""
+    auth_string = f"{JIRA_EMAIL}:{JIRA_API_TOKEN}"
+    auth_bytes = auth_string.encode('ascii')
+    base64_bytes = base64.b64encode(auth_bytes)
+    base64_string = base64_bytes.decode('ascii')
+    return {
+        "Authorization": f"Basic {base64_string}",
+        "Content-Type": "application/json"
+    }
+
+
 def execute_request_server(
     url: str, headers: Dict[str, str], query_params: Dict[str, str]
 ) -> Optional[Dict[str, Any]]:
@@ -43,6 +59,22 @@ def execute_request_server(
     try:
         response = safe_requests.get(
             url, headers=headers, params=query_params, timeout=DEFAULT_REQUEST_TIMEOUT
+        )
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as error:
+        handle_request_error(error)
+        return None
+
+
+def execute_request_cloud(
+    url: str, headers: Dict[str, str], jql_query: str
+) -> Optional[Dict[str, Any]]:
+    """Execute the request and return the response for Jira Cloud using POST."""
+    try:
+        payload = {"jql": jql_query}
+        response = safe_requests.post(
+            url, headers=headers, json=payload, timeout=DEFAULT_REQUEST_TIMEOUT
         )
         response.raise_for_status()
         return response.json()
@@ -94,11 +126,22 @@ def get_jql_query_results(jql_query: str) -> int:
         logger.error(f"Invalid JQL query rejected: {jql_query}")
         return 0
 
-    url = create_request_url(JIRA_API_ENDPOINT)
-    headers = create_request_headers_server()
-    query_params = {"jql": jql_query}
-    response = execute_request_server(url, headers, query_params)
-    return response.get("total", 0) if response else 0
+    # Use Cloud auth and endpoint if email is configured, otherwise use Server
+    if JIRA_EMAIL:
+        # Cloud uses POST to /search/approximate-count
+        url = create_request_url(JIRA_API_ENDPOINT_CLOUD)
+        headers = create_request_headers_cloud()
+        response = execute_request_cloud(url, headers, jql_query)
+        # approximate-count returns {"count": number}
+        return response.get("count", 0) if response else 0
+    else:
+        # Server uses GET to /search with query params
+        url = create_request_url(JIRA_API_ENDPOINT_SERVER)
+        headers = create_request_headers_server()
+        query_params = {"jql": jql_query}
+        response = execute_request_server(url, headers, query_params)
+        # Server returns {"total": number, "issues": [...]}
+        return response.get("total", 0) if response else 0
 
 
 # Example usage
