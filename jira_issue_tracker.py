@@ -1,5 +1,5 @@
 import os
-from dotenv import get_key
+from dotenv import get_key, set_key
 from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
@@ -7,10 +7,12 @@ from requests.exceptions import RequestException
 
 # Conditional imports for CI environment
 if os.environ.get("CI") != "true":
-    from kivymd.uix.button import MDRaisedButton
+    from kivymd.uix.button import MDRaisedButton, MDIconButton
     from kivymd.uix.tooltip import MDTooltip
     from kivymd.app import MDApp
     from kivymd.uix.label import MDLabel
+    from kivymd.uix.boxlayout import MDBoxLayout
+    from kivy.uix.floatlayout import FloatLayout
 else:
     from ci_mocks import MDRaisedButton, MDTooltip, MDApp, MDLabel
 
@@ -24,19 +26,19 @@ from api import (
     JQL_QUERY_FOUR,
 )
 from issue_box import IssueBox
-from jira_connection_settings_popup import open_settings_popup
+from jira_connection_settings_popup import open_settings_popup, open_query_editor
 
-# UI Constants
+# UI Constants - Dashboard widget styling
 ERROR_COLOR_RED = (1, 0, 0, 1)
-GRID_SPACING = 20
-GRID_PADDING = 20
+GRID_SPACING = 12  # Tight, clean spacing
+GRID_PADDING = 20  # Balanced edge padding
 
 
 class JiraIssueTracker(GridLayout):
     """Main Jira Issue Tracker widget that displays issue counts in a grid layout."""
 
     def create_issue_box(self, title, query):
-        box = IssueBox(title, query, self.jira_base_url)
+        box = IssueBox(title, query, self.jira_base_url, theme_name=self.theme_names[self.current_theme_index])
         self.add_widget(box)
         self.boxes.append(box)
 
@@ -73,6 +75,12 @@ class JiraIssueTracker(GridLayout):
         super().__init__(**kwargs)
         self.boxes = []  # Initialize self.boxes as an empty list
         self.mode_button = None
+        self.theme_names = ["Default", "Ocean", "Sunset", "Forest", "Nord"]
+
+        # Load saved theme preference
+        saved_theme = get_key(".env", "THEME_PREFERENCE") or "Default"
+        self.current_theme_index = self.theme_names.index(saved_theme) if saved_theme in self.theme_names else 0
+
         self.jira_site_url = get_key(".env", "JIRA_SITE_URL")
         self.jira_base_url = (
             f"{self.jira_site_url}/issues/" if self.jira_site_url else None
@@ -91,9 +99,15 @@ class JiraIssueTracker(GridLayout):
             self.setup_ui()
 
     def setup_ui(self):
+        from kivy.utils import get_color_from_hex
         self.cols = 2
         self.spacing = GRID_SPACING
         self.padding = GRID_PADDING
+
+        # Set dark background for modern look
+        app = MDApp.get_running_app()
+        self.md_bg_color = get_color_from_hex("1a1a1a")
+
         self.create_issue_boxes()
         Clock.schedule_interval(self.update_labels, DEFAULT_API_REQUEST_INTERVAL)
         self.update_labels(0)
@@ -101,56 +115,94 @@ class JiraIssueTracker(GridLayout):
         self.create_user_settings_button()
 
     def create_mode_toggle_button(self):
-        # Add a separator label before buttons
-        separator = MDLabel(
-            text="", size_hint_y=None, height="20dp", theme_text_color="Hint"
+        """Create small icon buttons for app controls."""
+        if os.environ.get("CI") == "true":
+            return
+
+        # No spacer needed - tight layout
+
+        # Create a horizontal box layout for icon buttons
+        button_box = MDBoxLayout(
+            orientation="horizontal",
+            size_hint=(1, None),
+            height="44dp",
+            spacing="16dp",
+            padding=["12dp", "4dp", "12dp", "4dp"],
         )
-        self.add_widget(separator)
 
-        self.mode_button = MDRaisedButton(
-            text="Toggle Light/Dark Mode",
-            size_hint=(0.5, None),
-            height=50,
-            pos_hint={"center_x": 0.5},
-            md_bg_color=(0.2, 0.6, 1, 1),  # Blue color for better visibility
+        # Theme switcher button
+        theme_btn = MDIconButton(
+            icon="palette",
+            theme_text_color="Custom",
+            text_color=(1, 1, 1, 0.6),
+            pos_hint={"center_y": 0.5},
         )
-        self.mode_button.bind(on_press=self.toggle_mode)
+        theme_btn.bind(on_press=self.cycle_theme)
 
-        # Add tooltip to mode button (only if app is running)
-        try:
-            app = MDApp.get_running_app()
-            if app:
-                tooltip = MDTooltip(
-                    tooltip_text="Switch between light and dark themes for better visibility",
-                    widget=self.mode_button,
-                )
-        except:
-            pass  # Skip tooltip if app context not available
+        # Query editor button
+        query_btn = MDIconButton(
+            icon="pencil",
+            theme_text_color="Custom",
+            text_color=(1, 1, 1, 0.6),
+            pos_hint={"center_y": 0.5},
+        )
+        query_btn.bind(on_press=open_query_editor)
 
-        self.add_widget(self.mode_button)
+        # Refresh icon button
+        refresh_btn = MDIconButton(
+            icon="refresh",
+            theme_text_color="Custom",
+            text_color=(1, 1, 1, 0.6),
+            pos_hint={"center_y": 0.5},
+        )
+        refresh_btn.bind(on_press=lambda x: self.update_labels(0))
+
+        # Settings icon button
+        settings_btn = MDIconButton(
+            icon="cog",
+            theme_text_color="Custom",
+            text_color=(1, 1, 1, 0.6),
+            pos_hint={"center_y": 0.5},
+        )
+        settings_btn.bind(on_press=open_settings_popup)
+
+        # Add spacer to push buttons to the right
+        button_box.add_widget(MDLabel(text=""))  # Spacer
+        button_box.add_widget(theme_btn)
+        button_box.add_widget(query_btn)
+        button_box.add_widget(refresh_btn)
+        button_box.add_widget(settings_btn)
+
+        self.add_widget(button_box)
 
     def create_user_settings_button(self):
-        self.user_settings_button = MDRaisedButton(
-            text="User Settings",
-            size_hint=(0.5, None),
-            height=50,
-            pos_hint={"center_x": 0.5},
-            md_bg_color=(0.3, 0.7, 0.3, 1),  # Green color for settings
-        )
-        self.user_settings_button.bind(on_press=open_settings_popup)
+        """Deprecated - settings now in icon button."""
+        pass
 
-        # Add tooltip to settings button (only if app is running)
+    def cycle_theme(self, instance):
+        """Cycle through available themes."""
+        # Move to next theme
+        self.current_theme_index = (self.current_theme_index + 1) % len(self.theme_names)
+        new_theme_name = self.theme_names[self.current_theme_index]
+
+        # Save theme preference to .env
         try:
-            app = MDApp.get_running_app()
-            if app:
-                tooltip = MDTooltip(
-                    tooltip_text="Configure Jira connection settings and credentials",
-                    widget=self.user_settings_button,
-                )
+            set_key(".env", "THEME_PREFERENCE", new_theme_name)
         except:
-            pass  # Skip tooltip if app context not available
+            pass  # Silently fail if can't save
 
-        self.add_widget(self.user_settings_button)
+        # Update all boxes with new theme
+        from issue_box import THEMES
+        for box in self.boxes:
+            if box.title in THEMES[new_theme_name]:
+                box.gradient_colors = THEMES[new_theme_name][box.title]
+                box.md_bg_color = box.gradient_colors["start"]
+                # Update icon if it changed
+                if hasattr(box, 'icon_label') and box.icon_label:
+                    box.icon_label.icon = box.gradient_colors["icon"]
+
+        # Show brief notification of theme change
+        print(f"Theme changed to: {new_theme_name}")
 
     def toggle_mode(self, instance):
         app = MDApp.get_running_app()

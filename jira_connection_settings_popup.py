@@ -61,26 +61,30 @@ class JiraConnectionSettingsPopup(MDDialog):
         )
 
         self.jira_site_url = MDTextField(
-            hint_text=current_jira_site_url,
+            hint_text="https://yourcompany.atlassian.net",
+            text=current_jira_site_url if current_jira_site_url != "Jira Site URL" else "",
             size_hint=(1, None),
             height="48dp",
             multiline=False,
+            font_size="14sp",
         )
 
         self.jira_api_token = MDTextField(
-            hint_text=current_jira_api_token,
+            hint_text="Enter your API token",
             size_hint=(1, None),
             height="48dp",
             multiline=False,
+            password=True,
+            font_size="12sp",
         )
 
         # MDBoxLayout for content
         content = MDBoxLayout(
             orientation="vertical",
-            padding=[10, 20, 10, 20],
-            spacing=15,
+            padding=[20, 20, 20, 20],
+            spacing=12,
             size_hint_y=None,
-            height="200dp",  # Adjusted height to accommodate labels
+            height="220dp",  # More height for better spacing
         )
 
         # Add widgets to the layout
@@ -127,4 +131,95 @@ class JiraConnectionSettingsPopup(MDDialog):
 
 def open_settings_popup(instance):
     popup = JiraConnectionSettingsPopup()
+    popup.open()
+
+
+class JiraQueryEditorPopup(MDDialog):
+    def __init__(self, **kwargs):
+        # Load current JQL queries
+        load_dotenv(find_dotenv())
+
+        query_one = get_key(".env", "JQL_QUERY_ONE") or ""
+        query_two = get_key(".env", "JQL_QUERY_TWO") or ""
+        query_three = get_key(".env", "JQL_QUERY_THREE") or ""
+        query_four = get_key(".env", "JQL_QUERY_FOUR") or ""
+
+        # Create text fields for each query
+        self.query_one_field = MDTextField(
+            text=query_one,
+            hint_text="Query One JQL",
+            multiline=True,
+            size_hint=(1, None),
+            height="80dp",
+        )
+
+        self.query_two_field = MDTextField(
+            text=query_two,
+            hint_text="Query Two JQL",
+            multiline=True,
+            size_hint=(1, None),
+            height="80dp",
+        )
+
+        self.query_three_field = MDTextField(
+            text=query_three,
+            hint_text="Query Three JQL",
+            multiline=True,
+            size_hint=(1, None),
+            height="80dp",
+        )
+
+        self.query_four_field = MDTextField(
+            text=query_four,
+            hint_text="Query Four JQL",
+            multiline=True,
+            size_hint=(1, None),
+            height="80dp",
+        )
+
+        # Content layout
+        content = MDBoxLayout(
+            orientation="vertical",
+            padding=[20, 20, 20, 20],
+            spacing=12,
+            size_hint_y=None,
+            height="400dp",
+        )
+
+        content.add_widget(MDLabel(text="Edit JQL Queries", font_style="H6", size_hint_y=None, height="30dp"))
+        content.add_widget(self.query_one_field)
+        content.add_widget(self.query_two_field)
+        content.add_widget(self.query_three_field)
+        content.add_widget(self.query_four_field)
+
+        save_button = MDRaisedButton(
+            text="Save and Restart", on_release=self.save_queries
+        )
+        close_button = MDRaisedButton(
+            text="Cancel", on_release=lambda x: self.dismiss()
+        )
+
+        super().__init__(
+            type="custom",
+            content_cls=content,
+            buttons=[save_button, close_button],
+            size_hint=(0.9, None),
+            height="550dp",
+        )
+
+    def save_queries(self, instance):
+        try:
+            set_key(".env", "JQL_QUERY_ONE", self.query_one_field.text.strip())
+            set_key(".env", "JQL_QUERY_TWO", self.query_two_field.text.strip())
+            set_key(".env", "JQL_QUERY_THREE", self.query_three_field.text.strip())
+            set_key(".env", "JQL_QUERY_FOUR", self.query_four_field.text.strip())
+            self.dismiss()
+            MDApp.get_running_app().stop()
+        except Exception as e:
+            print(f"Error saving queries: {e}")
+            self.dismiss()
+
+
+def open_query_editor(instance):
+    popup = JiraQueryEditorPopup()
     popup.open()

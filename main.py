@@ -15,7 +15,26 @@ else:
 
 
 class JiraTrackerApp(MDApp):
+    title = "Jira Tracker"  # Clean title without "App" suffix
+
     def build(self):
+        # Configure window appearance
+        from kivy.core.window import Window
+        from kivy.utils import get_color_from_hex
+
+        # Set window size (optimal proportions)
+        Window.size = (620, 580)
+        Window.minimum_width = 580
+        Window.minimum_height = 540
+
+        # Set window background to dark (RGBA format)
+        Window.clearcolor = (0.1, 0.1, 0.1, 1)
+
+        # Set modern dark theme with vibrant colors
+        self.theme_cls.theme_style = "Dark"
+        self.theme_cls.primary_palette = "DeepPurple"
+        self.theme_cls.accent_palette = "Cyan"
+
         # Validate .env file exists and has required variables
         is_valid, missing_vars = validate_env_file()
 
