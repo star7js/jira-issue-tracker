@@ -14,7 +14,7 @@ if os.environ.get("CI") != "true":
     from kivymd.uix.boxlayout import MDBoxLayout
     from kivy.uix.floatlayout import FloatLayout
 else:
-    from ci_mocks import MDRaisedButton, MDTooltip, MDApp, MDLabel
+    from .ci_mocks import MDRaisedButton, MDTooltip, MDApp, MDLabel
 
 
 from .api import (

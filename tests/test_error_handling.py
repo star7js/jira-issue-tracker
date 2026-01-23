@@ -43,7 +43,10 @@ class TestErrorHandling(unittest.TestCase):
     def test_api_error_handling_logic(self, mock_get_results):
         """Test that API errors are handled gracefully in the logic."""
         # Test the error handling logic without creating UI components
-        with patch("jira_tracker.jira_issue_tracker.get_key", return_value="https://test-jira.com"):
+        with patch(
+            "jira_tracker.jira_issue_tracker.get_key",
+            return_value="https://test-jira.com",
+        ):
             # Create tracker but don't call setup_ui to avoid KivyMD context issues
             tracker = JiraIssueTracker.__new__(JiraIssueTracker)
             tracker.boxes = []

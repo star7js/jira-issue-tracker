@@ -5,7 +5,10 @@ from jira_tracker.jira_issue_tracker import JiraIssueTracker
 
 class TestJiraIssueTracker(unittest.TestCase):
 
-    @patch("jira_tracker.jira_issue_tracker.get_key", return_value="https://dummy-jira-url.com")
+    @patch(
+        "jira_tracker.jira_issue_tracker.get_key",
+        return_value="https://dummy-jira-url.com",
+    )
     def test_initialization(self, mock_get_key):
         # Test initialization without creating Kivy window or app
         with patch("jira_tracker.jira_issue_tracker.MDLabel") as mock_mdlabel:
