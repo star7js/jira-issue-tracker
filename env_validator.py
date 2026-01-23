@@ -11,11 +11,13 @@ REQUIRED_ENV_VARS = ["JIRA_SITE_URL", "JIRA_API_TOKEN"]
 
 # Optional environment variables
 OPTIONAL_ENV_VARS = [
+    "JIRA_EMAIL",  # Required for Jira Cloud, optional for Server/Data Center
     "JQL_QUERY_ONE",
     "JQL_QUERY_TWO",
     "JQL_QUERY_THREE",
     "JQL_QUERY_FOUR",
     "JIRA_SERVER",
+    "THEME_PREFERENCE",
 ]
 
 

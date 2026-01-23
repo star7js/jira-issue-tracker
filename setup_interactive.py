@@ -54,9 +54,20 @@ def main():
         update_env_file("JIRA_SITE_URL", jira_url)
         print("   ✅ Jira site URL configured")
 
+    # Get email for Cloud authentication
+    print("\n2. Email (Required for Jira Cloud only)")
+    print("   This is your Atlassian account email")
+    print("   Leave blank if using Jira Server/Data Center")
+    jira_email = input("   Enter your email: ").strip()
+
+    if jira_email:
+        update_env_file("JIRA_EMAIL", jira_email)
+        print("   ✅ Email configured")
+
     # Get API token
-    print("\n2. Jira API Token")
-    print("   Generate at: https://id.atlassian.com/manage-profile/security/api-tokens")
+    print("\n3. Jira API Token")
+    print("   Cloud: Generate at https://id.atlassian.com/manage-profile/security/api-tokens")
+    print("   Server/Data Center: Use Personal Access Token from your Jira instance")
     print("   (This is NOT your password - it's a separate API token)")
     api_token = input("   Enter your Jira API token: ").strip()
 
@@ -65,7 +76,7 @@ def main():
         print("   ✅ API token configured")
 
     # Optional: Customize JQL queries
-    print("\n3. JQL Queries (Optional)")
+    print("\n4. JQL Queries (Optional)")
     print("   You can customize the JQL queries now or edit .env later")
     customize_queries = input("   Customize JQL queries now? (y/N): ").lower()
 

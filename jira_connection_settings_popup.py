@@ -47,6 +47,7 @@ class JiraConnectionSettingsPopup(MDDialog):
 
         # Get current values from .env, if they exist
         current_jira_site_url = get_key(".env", "JIRA_SITE_URL") or "Jira Site URL"
+        current_jira_email = get_key(".env", "JIRA_EMAIL") or ""
         current_jira_api_token = (
             get_key(".env", "JIRA_API_TOKEN") or "Jira Personal Access Token"
         )
@@ -56,8 +57,15 @@ class JiraConnectionSettingsPopup(MDDialog):
             text="Jira Site URL", halign="center", size_hint_y=None, height="20dp"
         )
 
+        jira_email_label = MDLabel(
+            text="Email (Required for Cloud only)",
+            halign="center",
+            size_hint_y=None,
+            height="20dp",
+        )
+
         jira_api_key_label = MDLabel(
-            text="Jira Personal Access Token",
+            text="API Token",
             halign="center",
             size_hint_y=None,
             height="20dp",
@@ -66,6 +74,15 @@ class JiraConnectionSettingsPopup(MDDialog):
         self.jira_site_url = MDTextField(
             hint_text="https://yourcompany.atlassian.net",
             text=current_jira_site_url if current_jira_site_url != "Jira Site URL" else "",
+            size_hint=(1, None),
+            height="48dp",
+            multiline=False,
+            font_size="14sp",
+        )
+
+        self.jira_email = MDTextField(
+            hint_text="your.email@company.com",
+            text=current_jira_email,
             size_hint=(1, None),
             height="48dp",
             multiline=False,
@@ -87,12 +104,14 @@ class JiraConnectionSettingsPopup(MDDialog):
             padding=[20, 20, 20, 20],
             spacing=12,
             size_hint_y=None,
-            height="220dp",  # More height for better spacing
+            height="300dp",  # Increased height for email field
         )
 
         # Add widgets to the layout
         content.add_widget(jira_site_url_label)
         content.add_widget(self.jira_site_url)
+        content.add_widget(jira_email_label)
+        content.add_widget(self.jira_email)
         content.add_widget(jira_api_key_label)
         content.add_widget(self.jira_api_token)
 
@@ -113,13 +132,17 @@ class JiraConnectionSettingsPopup(MDDialog):
 
         # Set the height for MDTextFields to None to allow for auto-sizing
         self.jira_site_url.height = "30dp"
+        self.jira_email.height = "30dp"
         self.jira_api_token.height = "30dp"
 
     def save_settings(self, instance):
         jira_api_token = self.jira_api_token.text.strip()
         jira_site_url = self.jira_site_url.text.rstrip("/")
+        jira_email = self.jira_email.text.strip()
 
         try:
+            if jira_email:
+                set_key(".env", "JIRA_EMAIL", jira_email)
             if jira_api_token:
                 set_key(".env", "JIRA_API_TOKEN", jira_api_token)
             if jira_site_url:

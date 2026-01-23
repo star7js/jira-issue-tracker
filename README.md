@@ -68,11 +68,16 @@ Follow the prompts to configure your Jira connection.
 2. Get your API token:
    - **Jira Cloud**: Visit [API Tokens](https://id.atlassian.com/manage-profile/security/api-tokens)
    - **Jira Server/Data Center**: Follow your organization's process
-3. Edit `.env`:
+3. Edit `.env` with your credentials:
+   - **For Jira Cloud**: Set `JIRA_SITE_URL`, `JIRA_EMAIL`, and `JIRA_API_TOKEN`
+   - **For Server/Data Center**: Set `JIRA_SITE_URL` and `JIRA_API_TOKEN` only
 
 ```env
 # Your Jira URL (include https://)
 JIRA_SITE_URL=https://yourcompany.atlassian.net
+
+# Your email (REQUIRED for Jira Cloud only, leave empty for Server/Data Center)
+JIRA_EMAIL=your.email@company.com
 
 # Your API token (NOT your password!)
 JIRA_API_TOKEN=your_token_here
@@ -89,11 +94,13 @@ THEME_PREFERENCE=Default
 
 ## Deployment Types
 
-| Type | Example URL |
-|------|-------------|
-| Jira Cloud | `https://yourcompany.atlassian.net` |
-| Jira Server | `https://jira.yourcompany.com` |
-| Jira Data Center | `https://yourcompany.com/jira` |
+| Type | Example URL | Authentication |
+|------|-------------|----------------|
+| Jira Cloud | `https://yourcompany.atlassian.net` | Email + API Token |
+| Jira Server | `https://jira.yourcompany.com` | API Token only |
+| Jira Data Center | `https://yourcompany.com/jira` | API Token only |
+
+**Note:** Jira Cloud requires both your email and API token for authentication. Server/Data Center only needs the API token.
 
 ## JQL Query Examples
 
