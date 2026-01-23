@@ -66,7 +66,9 @@ def main():
 
     # Get API token
     print("\n3. Jira API Token")
-    print("   Cloud: Generate at https://id.atlassian.com/manage-profile/security/api-tokens")
+    print(
+        "   Cloud: Generate at https://id.atlassian.com/manage-profile/security/api-tokens"
+    )
     print("   Server/Data Center: Use Personal Access Token from your Jira instance")
     print("   (This is NOT your password - it's a separate API token)")
     api_token = input("   Enter your Jira API token: ").strip()

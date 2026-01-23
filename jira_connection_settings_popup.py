@@ -73,7 +73,11 @@ class JiraConnectionSettingsPopup(MDDialog):
 
         self.jira_site_url = MDTextField(
             hint_text="https://yourcompany.atlassian.net",
-            text=current_jira_site_url if current_jira_site_url != "Jira Site URL" else "",
+            text=(
+                current_jira_site_url
+                if current_jira_site_url != "Jira Site URL"
+                else ""
+            ),
             size_hint=(1, None),
             height="48dp",
             multiline=False,
@@ -211,7 +215,14 @@ class JiraQueryEditorPopup(MDDialog):
             height="400dp",
         )
 
-        content.add_widget(MDLabel(text="Edit JQL Queries", font_style="H6", size_hint_y=None, height="30dp"))
+        content.add_widget(
+            MDLabel(
+                text="Edit JQL Queries",
+                font_style="H6",
+                size_hint_y=None,
+                height="30dp",
+            )
+        )
         content.add_widget(self.query_one_field)
         content.add_widget(self.query_two_field)
         content.add_widget(self.query_three_field)

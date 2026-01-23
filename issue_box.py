@@ -47,35 +47,115 @@ DARK_TEXT_COLOR = get_color_from_hex("000000")  # Black text for light backgroun
 # Preset theme collections
 THEMES = {
     "Default": {
-        "Query One": {"start": get_color_from_hex("667eea"), "end": get_color_from_hex("764ba2"), "icon": "account-circle"},
-        "Query Two": {"start": get_color_from_hex("f093fb"), "end": get_color_from_hex("f5576c"), "icon": "file-document"},
-        "Query Three": {"start": get_color_from_hex("4facfe"), "end": get_color_from_hex("00f2fe"), "icon": "calendar-clock"},
-        "Query Four": {"start": get_color_from_hex("43e97b"), "end": get_color_from_hex("38f9d7"), "icon": "alert-circle"}
+        "Query One": {
+            "start": get_color_from_hex("667eea"),
+            "end": get_color_from_hex("764ba2"),
+            "icon": "account-circle",
+        },
+        "Query Two": {
+            "start": get_color_from_hex("f093fb"),
+            "end": get_color_from_hex("f5576c"),
+            "icon": "file-document",
+        },
+        "Query Three": {
+            "start": get_color_from_hex("4facfe"),
+            "end": get_color_from_hex("00f2fe"),
+            "icon": "calendar-clock",
+        },
+        "Query Four": {
+            "start": get_color_from_hex("43e97b"),
+            "end": get_color_from_hex("38f9d7"),
+            "icon": "alert-circle",
+        },
     },
     "Ocean": {
-        "Query One": {"start": get_color_from_hex("2E3192"), "end": get_color_from_hex("1BFFFF"), "icon": "account-circle"},
-        "Query Two": {"start": get_color_from_hex("00d2ff"), "end": get_color_from_hex("3a7bd5"), "icon": "file-document"},
-        "Query Three": {"start": get_color_from_hex("108dc7"), "end": get_color_from_hex("ef8e38"), "icon": "calendar-clock"},
-        "Query Four": {"start": get_color_from_hex("134E5E"), "end": get_color_from_hex("71B280"), "icon": "alert-circle"}
+        "Query One": {
+            "start": get_color_from_hex("2E3192"),
+            "end": get_color_from_hex("1BFFFF"),
+            "icon": "account-circle",
+        },
+        "Query Two": {
+            "start": get_color_from_hex("00d2ff"),
+            "end": get_color_from_hex("3a7bd5"),
+            "icon": "file-document",
+        },
+        "Query Three": {
+            "start": get_color_from_hex("108dc7"),
+            "end": get_color_from_hex("ef8e38"),
+            "icon": "calendar-clock",
+        },
+        "Query Four": {
+            "start": get_color_from_hex("134E5E"),
+            "end": get_color_from_hex("71B280"),
+            "icon": "alert-circle",
+        },
     },
     "Sunset": {
-        "Query One": {"start": get_color_from_hex("FF512F"), "end": get_color_from_hex("DD2476"), "icon": "account-circle"},
-        "Query Two": {"start": get_color_from_hex("FF6B6B"), "end": get_color_from_hex("FFE66D"), "icon": "file-document"},
-        "Query Three": {"start": get_color_from_hex("ee9ca7"), "end": get_color_from_hex("ffdde1"), "icon": "calendar-clock"},
-        "Query Four": {"start": get_color_from_hex("fc4a1a"), "end": get_color_from_hex("f7b733"), "icon": "alert-circle"}
+        "Query One": {
+            "start": get_color_from_hex("FF512F"),
+            "end": get_color_from_hex("DD2476"),
+            "icon": "account-circle",
+        },
+        "Query Two": {
+            "start": get_color_from_hex("FF6B6B"),
+            "end": get_color_from_hex("FFE66D"),
+            "icon": "file-document",
+        },
+        "Query Three": {
+            "start": get_color_from_hex("ee9ca7"),
+            "end": get_color_from_hex("ffdde1"),
+            "icon": "calendar-clock",
+        },
+        "Query Four": {
+            "start": get_color_from_hex("fc4a1a"),
+            "end": get_color_from_hex("f7b733"),
+            "icon": "alert-circle",
+        },
     },
     "Forest": {
-        "Query One": {"start": get_color_from_hex("134E5E"), "end": get_color_from_hex("71B280"), "icon": "account-circle"},
-        "Query Two": {"start": get_color_from_hex("56ab2f"), "end": get_color_from_hex("a8e063"), "icon": "file-document"},
-        "Query Three": {"start": get_color_from_hex("2C5F2D"), "end": get_color_from_hex("97BC62"), "icon": "calendar-clock"},
-        "Query Four": {"start": get_color_from_hex("0F2027"), "end": get_color_from_hex("2C5364"), "icon": "alert-circle"}
+        "Query One": {
+            "start": get_color_from_hex("134E5E"),
+            "end": get_color_from_hex("71B280"),
+            "icon": "account-circle",
+        },
+        "Query Two": {
+            "start": get_color_from_hex("56ab2f"),
+            "end": get_color_from_hex("a8e063"),
+            "icon": "file-document",
+        },
+        "Query Three": {
+            "start": get_color_from_hex("2C5F2D"),
+            "end": get_color_from_hex("97BC62"),
+            "icon": "calendar-clock",
+        },
+        "Query Four": {
+            "start": get_color_from_hex("0F2027"),
+            "end": get_color_from_hex("2C5364"),
+            "icon": "alert-circle",
+        },
     },
     "Nord": {
-        "Query One": {"start": get_color_from_hex("5E81AC"), "end": get_color_from_hex("81A1C1"), "icon": "account-circle"},
-        "Query Two": {"start": get_color_from_hex("88C0D0"), "end": get_color_from_hex("8FBCBB"), "icon": "file-document"},
-        "Query Three": {"start": get_color_from_hex("B48EAD"), "end": get_color_from_hex("A3BE8C"), "icon": "calendar-clock"},
-        "Query Four": {"start": get_color_from_hex("BF616A"), "end": get_color_from_hex("D08770"), "icon": "alert-circle"}
-    }
+        "Query One": {
+            "start": get_color_from_hex("5E81AC"),
+            "end": get_color_from_hex("81A1C1"),
+            "icon": "account-circle",
+        },
+        "Query Two": {
+            "start": get_color_from_hex("88C0D0"),
+            "end": get_color_from_hex("8FBCBB"),
+            "icon": "file-document",
+        },
+        "Query Three": {
+            "start": get_color_from_hex("B48EAD"),
+            "end": get_color_from_hex("A3BE8C"),
+            "icon": "calendar-clock",
+        },
+        "Query Four": {
+            "start": get_color_from_hex("BF616A"),
+            "end": get_color_from_hex("D08770"),
+            "icon": "alert-circle",
+        },
+    },
 }
 
 # Default theme
@@ -124,11 +204,13 @@ class IssueBox(MDCard):
 
         # Enable hover detection
         from kivy.core.window import Window
+
         Window.bind(mouse_pos=self.on_mouse_pos)
 
         # Fade in animation on load
         self.opacity = 0
         from kivy.animation import Animation
+
         Animation(opacity=1, duration=0.4).start(self)
 
     def add_tooltips(self):
@@ -244,7 +326,9 @@ class IssueBox(MDCard):
         # Animate the number change
         old_count = 0
         try:
-            old_count = int(self.issue_label.text) if self.issue_label.text.isdigit() else 0
+            old_count = (
+                int(self.issue_label.text) if self.issue_label.text.isdigit() else 0
+            )
         except:
             old_count = 0
 
@@ -257,18 +341,21 @@ class IssueBox(MDCard):
     def animate_count(self, start, end):
         """Animate counting up from start to end."""
         from kivy.clock import Clock
+
         duration = 0.5  # Animation duration in seconds
         steps = min(abs(end - start), 20)  # Max 20 steps
         interval = duration / steps if steps > 0 else 0
 
         def update_step(dt):
-            if not hasattr(self, '_current_count'):
+            if not hasattr(self, "_current_count"):
                 self._current_count = start
 
             step_size = (end - start) / steps
             self._current_count += step_size
 
-            if (step_size > 0 and self._current_count >= end) or (step_size < 0 and self._current_count <= end):
+            if (step_size > 0 and self._current_count >= end) or (
+                step_size < 0 and self._current_count <= end
+            ):
                 self.issue_label.text = str(end)
                 return False  # Stop the clock
             else:
@@ -292,27 +379,30 @@ class IssueBox(MDCard):
             return
 
         from kivy.core.window import Window
+
         # Check if mouse is over this widget
         if self.collide_point(*self.to_widget(*pos)):
-            if not hasattr(self, '_is_hovered') or not self._is_hovered:
+            if not hasattr(self, "_is_hovered") or not self._is_hovered:
                 self._is_hovered = True
-                Window.set_system_cursor('hand')
+                Window.set_system_cursor("hand")
                 self.on_hover_enter()
         else:
-            if hasattr(self, '_is_hovered') and self._is_hovered:
+            if hasattr(self, "_is_hovered") and self._is_hovered:
                 self._is_hovered = False
-                Window.set_system_cursor('arrow')
+                Window.set_system_cursor("arrow")
                 self.on_hover_leave()
 
     def on_hover_enter(self):
         """Add glow effect on hover with elevation animation."""
         from kivy.animation import Animation
+
         # Increase elevation for glow effect
         Animation(elevation=16, duration=0.15).start(self)
 
     def on_hover_leave(self):
         """Remove glow effect when not hovering."""
         from kivy.animation import Animation
+
         # Return to normal elevation
         Animation(elevation=8, duration=0.15).start(self)
         # Ensure background color is maintained

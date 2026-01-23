@@ -38,7 +38,12 @@ class JiraIssueTracker(GridLayout):
     """Main Jira Issue Tracker widget that displays issue counts in a grid layout."""
 
     def create_issue_box(self, title, query):
-        box = IssueBox(title, query, self.jira_base_url, theme_name=self.theme_names[self.current_theme_index])
+        box = IssueBox(
+            title,
+            query,
+            self.jira_base_url,
+            theme_name=self.theme_names[self.current_theme_index],
+        )
         self.add_widget(box)
         self.boxes.append(box)
 
@@ -79,7 +84,11 @@ class JiraIssueTracker(GridLayout):
 
         # Load saved theme preference
         saved_theme = get_key(".env", "THEME_PREFERENCE") or "Default"
-        self.current_theme_index = self.theme_names.index(saved_theme) if saved_theme in self.theme_names else 0
+        self.current_theme_index = (
+            self.theme_names.index(saved_theme)
+            if saved_theme in self.theme_names
+            else 0
+        )
 
         self.jira_site_url = get_key(".env", "JIRA_SITE_URL")
         self.jira_base_url = (
@@ -100,6 +109,7 @@ class JiraIssueTracker(GridLayout):
 
     def setup_ui(self):
         from kivy.utils import get_color_from_hex
+
         self.cols = 2
         self.spacing = GRID_SPACING
         self.padding = GRID_PADDING
@@ -174,6 +184,7 @@ class JiraIssueTracker(GridLayout):
 
         # Add empty left column spacer to push button_box to right column
         from kivy.uix.widget import Widget
+
         self.add_widget(Widget())
         self.add_widget(button_box)
 
@@ -184,7 +195,9 @@ class JiraIssueTracker(GridLayout):
     def cycle_theme(self, instance):
         """Cycle through available themes."""
         # Move to next theme
-        self.current_theme_index = (self.current_theme_index + 1) % len(self.theme_names)
+        self.current_theme_index = (self.current_theme_index + 1) % len(
+            self.theme_names
+        )
         new_theme_name = self.theme_names[self.current_theme_index]
 
         # Save theme preference to .env
@@ -195,12 +208,13 @@ class JiraIssueTracker(GridLayout):
 
         # Update all boxes with new theme
         from issue_box import THEMES
+
         for box in self.boxes:
             if box.title in THEMES[new_theme_name]:
                 box.gradient_colors = THEMES[new_theme_name][box.title]
                 box.md_bg_color = box.gradient_colors["start"]
                 # Update icon if it changed
-                if hasattr(box, 'icon_label') and box.icon_label:
+                if hasattr(box, "icon_label") and box.icon_label:
                     box.icon_label.icon = box.gradient_colors["icon"]
 
     def toggle_mode(self, instance):

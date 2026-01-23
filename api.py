@@ -43,12 +43,12 @@ def create_request_headers_server() -> Dict[str, str]:
 def create_request_headers_cloud() -> Dict[str, str]:
     """Create the request headers for Jira Cloud using Basic Auth."""
     auth_string = f"{JIRA_EMAIL}:{JIRA_API_TOKEN}"
-    auth_bytes = auth_string.encode('ascii')
+    auth_bytes = auth_string.encode("ascii")
     base64_bytes = base64.b64encode(auth_bytes)
-    base64_string = base64_bytes.decode('ascii')
+    base64_string = base64_bytes.decode("ascii")
     return {
         "Authorization": f"Basic {base64_string}",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
     }
 
 
