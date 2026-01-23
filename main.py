@@ -31,10 +31,11 @@ class JiraTrackerApp(MDApp):
         # Set window background to dark (RGBA format)
         Window.clearcolor = (0.1, 0.1, 0.1, 1)
 
-        # Set modern dark theme with vibrant colors
-        self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "DeepPurple"
-        self.theme_cls.accent_palette = "Cyan"
+        # Set modern dark theme with vibrant colors (skip in CI/test mode)
+        if hasattr(self, "theme_cls"):
+            self.theme_cls.theme_style = "Dark"
+            self.theme_cls.primary_palette = "DeepPurple"
+            self.theme_cls.accent_palette = "Cyan"
 
         # Validate .env file exists and has required variables
         is_valid, missing_vars = validate_env_file()
