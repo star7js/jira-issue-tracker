@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/star7js/jira-issue-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/star7js/jira-issue-tracker/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/star7js/jira-issue-tracker/branch/main/graph/badge.svg)](https://codecov.io/gh/star7js/jira-issue-tracker)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)![Kivy](https://img.shields.io/badge/Kivy-2.0+-6B9B3A?logo=python&logoColor=white) ![KivyMD](https://img.shields.io/badge/KivyMD-1.2.0-FF5722?logo=materialdesignicons&logoColor=white) 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
