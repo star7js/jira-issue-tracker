@@ -102,10 +102,13 @@ class TestIssueBoxUnit(unittest.TestCase):
 
     def test_ci_environment_mock_classes(self):
         """Test that CI environment uses mock classes"""
-        # Set CI environment variable
-        os.environ["CI"] = "true"
+        # Store original CI value
+        original_ci = os.environ.get("CI")
 
         try:
+            # Set CI environment variable
+            os.environ["CI"] = "true"
+
             # Reload the module to trigger CI path
             import importlib
             import jira_tracker.issue_box
@@ -117,13 +120,12 @@ class TestIssueBoxUnit(unittest.TestCase):
             self.assertIsInstance(jira_tracker.issue_box.THEMES, dict)
 
         finally:
-            # Clean up
-            if "CI" in os.environ:
+            # Restore original CI value (don't delete it, as it's set in GitHub Actions)
+            if original_ci is not None:
+                os.environ["CI"] = original_ci
+            # If there was no original CI value and we're not actually in CI, clean up
+            elif "CI" in os.environ and os.environ.get("GITHUB_ACTIONS") != "true":
                 del os.environ["CI"]
-            import importlib
-            import jira_tracker.issue_box
-
-            importlib.reload(jira_tracker.issue_box)
 
     def test_theme_colors_are_tuples_or_lists(self):
         """Test that all theme colors are tuples or lists"""
