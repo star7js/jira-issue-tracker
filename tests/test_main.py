@@ -48,9 +48,7 @@ class TestJiraTrackerApp(unittest.TestCase):
     @patch("jira_tracker.main.validate_jira_url")
     @patch("jira_tracker.main.validate_env_file")
     @patch("jira_tracker.main.get_key")
-    def test_invalid_jira_url(
-        self, mock_get_key, mock_validate_env, mock_validate_url
-    ):
+    def test_invalid_jira_url(self, mock_get_key, mock_validate_env, mock_validate_url):
         """Test that invalid Jira URL returns settings popup"""
         mock_get_key.return_value = "invalid-url"
         mock_validate_env.return_value = (True, [])
@@ -85,7 +83,9 @@ class TestJiraTrackerApp(unittest.TestCase):
         mock_validate_env.return_value = (True, [])
         mock_validate_url.return_value = True
 
-        with patch("jira_tracker.main.get_key", return_value="https://jira.example.com"):
+        with patch(
+            "jira_tracker.main.get_key", return_value="https://jira.example.com"
+        ):
             with patch("jira_tracker.main.JiraIssueTracker") as mock_tracker:
                 mock_widget = MagicMock()
                 mock_tracker.return_value = mock_widget

@@ -44,12 +44,17 @@ class TestJiraIssueTracker(unittest.TestCase):
                     mock_add_widget.assert_called_once()
                     mock_setup_ui.assert_not_called()
 
-    @patch("jira_tracker.jira_issue_tracker.get_key", return_value="https://dummy-jira-url.com")
+    @patch(
+        "jira_tracker.jira_issue_tracker.get_key",
+        return_value="https://dummy-jira-url.com",
+    )
     def test_create_issue_box(self, mock_get_key):
         """Test creating an issue box"""
         with patch.object(JiraIssueTracker, "setup_ui"):
             with patch.object(JiraIssueTracker, "add_widget") as mock_add_widget:
-                with patch("jira_tracker.jira_issue_tracker.IssueBox") as mock_issue_box:
+                with patch(
+                    "jira_tracker.jira_issue_tracker.IssueBox"
+                ) as mock_issue_box:
                     tracker = JiraIssueTracker()
                     tracker.boxes = []
 
@@ -61,12 +66,17 @@ class TestJiraIssueTracker(unittest.TestCase):
                     mock_issue_box.assert_called_once()
                     self.assertEqual(len(tracker.boxes), 1)
 
-    @patch("jira_tracker.jira_issue_tracker.get_key", return_value="https://dummy-jira-url.com")
+    @patch(
+        "jira_tracker.jira_issue_tracker.get_key",
+        return_value="https://dummy-jira-url.com",
+    )
     def test_create_empty_box(self, mock_get_key):
         """Test creating an empty box"""
         with patch.object(JiraIssueTracker, "setup_ui"):
             with patch.object(JiraIssueTracker, "add_widget") as mock_add_widget:
-                with patch("jira_tracker.jira_issue_tracker.IssueBox") as mock_issue_box:
+                with patch(
+                    "jira_tracker.jira_issue_tracker.IssueBox"
+                ) as mock_issue_box:
                     tracker = JiraIssueTracker()
                     tracker.jira_base_url = "https://dummy-jira-url.com/issues/"
 
@@ -76,41 +86,67 @@ class TestJiraIssueTracker(unittest.TestCase):
                     tracker.create_empty_box()
 
                     mock_issue_box.assert_called_once_with(
-                        title="", jql_query="", jira_base_url="https://dummy-jira-url.com/issues/"
+                        title="",
+                        jql_query="",
+                        jira_base_url="https://dummy-jira-url.com/issues/",
                     )
                     self.assertTrue(mock_box.disabled)
 
-    @patch("jira_tracker.jira_issue_tracker.get_key", return_value="https://dummy-jira-url.com")
+    @patch(
+        "jira_tracker.jira_issue_tracker.get_key",
+        return_value="https://dummy-jira-url.com",
+    )
     def test_create_issue_boxes_single_query(self, mock_get_key):
         """Test creating issue boxes with a single query"""
         with patch.object(JiraIssueTracker, "setup_ui"):
             with patch.object(JiraIssueTracker, "add_widget"):
-                with patch("jira_tracker.jira_issue_tracker.JQL_QUERY_ONE", "project = ONE"):
+                with patch(
+                    "jira_tracker.jira_issue_tracker.JQL_QUERY_ONE", "project = ONE"
+                ):
                     with patch("jira_tracker.jira_issue_tracker.JQL_QUERY_TWO", ""):
-                        with patch("jira_tracker.jira_issue_tracker.JQL_QUERY_THREE", ""):
-                            with patch("jira_tracker.jira_issue_tracker.JQL_QUERY_FOUR", ""):
+                        with patch(
+                            "jira_tracker.jira_issue_tracker.JQL_QUERY_THREE", ""
+                        ):
+                            with patch(
+                                "jira_tracker.jira_issue_tracker.JQL_QUERY_FOUR", ""
+                            ):
                                 tracker = JiraIssueTracker()
                                 tracker.boxes = []
 
-                                with patch.object(tracker, "create_issue_box") as mock_create:
+                                with patch.object(
+                                    tracker, "create_issue_box"
+                                ) as mock_create:
                                     tracker.create_issue_boxes()
 
                                     self.assertEqual(tracker.cols, 1)
                                     self.assertEqual(mock_create.call_count, 1)
 
-    @patch("jira_tracker.jira_issue_tracker.get_key", return_value="https://dummy-jira-url.com")
+    @patch(
+        "jira_tracker.jira_issue_tracker.get_key",
+        return_value="https://dummy-jira-url.com",
+    )
     def test_create_issue_boxes_multiple_queries(self, mock_get_key):
         """Test creating issue boxes with multiple queries"""
         with patch.object(JiraIssueTracker, "setup_ui"):
             with patch.object(JiraIssueTracker, "add_widget"):
-                with patch("jira_tracker.jira_issue_tracker.JQL_QUERY_ONE", "project = ONE"):
-                    with patch("jira_tracker.jira_issue_tracker.JQL_QUERY_TWO", "project = TWO"):
-                        with patch("jira_tracker.jira_issue_tracker.JQL_QUERY_THREE", ""):
-                            with patch("jira_tracker.jira_issue_tracker.JQL_QUERY_FOUR", ""):
+                with patch(
+                    "jira_tracker.jira_issue_tracker.JQL_QUERY_ONE", "project = ONE"
+                ):
+                    with patch(
+                        "jira_tracker.jira_issue_tracker.JQL_QUERY_TWO", "project = TWO"
+                    ):
+                        with patch(
+                            "jira_tracker.jira_issue_tracker.JQL_QUERY_THREE", ""
+                        ):
+                            with patch(
+                                "jira_tracker.jira_issue_tracker.JQL_QUERY_FOUR", ""
+                            ):
                                 tracker = JiraIssueTracker()
                                 tracker.boxes = []
 
-                                with patch.object(tracker, "create_issue_box") as mock_create:
+                                with patch.object(
+                                    tracker, "create_issue_box"
+                                ) as mock_create:
                                     tracker.create_issue_boxes()
 
                                     self.assertEqual(tracker.cols, 2)
@@ -119,6 +155,7 @@ class TestJiraIssueTracker(unittest.TestCase):
     @patch("jira_tracker.jira_issue_tracker.get_key")
     def test_theme_preference_loading(self, mock_get_key):
         """Test loading saved theme preference"""
+
         def get_key_side_effect(file, key):
             if key == "THEME_PREFERENCE":
                 return "Ocean"
@@ -141,7 +178,10 @@ class TestJiraIssueTracker(unittest.TestCase):
         with patch.object(JiraIssueTracker, "setup_ui"):
             with patch.object(JiraIssueTracker, "add_widget"):
                 with patch("jira_tracker.jira_issue_tracker.set_key") as mock_set_key:
-                    with patch("builtins.__import__", side_effect=ImportError("No module named 'issue_box'")):
+                    with patch(
+                        "builtins.__import__",
+                        side_effect=ImportError("No module named 'issue_box'"),
+                    ):
                         tracker = JiraIssueTracker()
                         tracker.boxes = []
                         initial_index = tracker.current_theme_index
@@ -151,7 +191,10 @@ class TestJiraIssueTracker(unittest.TestCase):
                         except (ImportError, ModuleNotFoundError):
                             pass
 
-                        self.assertEqual(tracker.current_theme_index, (initial_index + 1) % len(tracker.theme_names))
+                        self.assertEqual(
+                            tracker.current_theme_index,
+                            (initial_index + 1) % len(tracker.theme_names),
+                        )
                         mock_set_key.assert_called_once()
 
     @patch("jira_tracker.jira_issue_tracker.get_key")
@@ -160,7 +203,7 @@ class TestJiraIssueTracker(unittest.TestCase):
         """Test updating labels successfully"""
         mock_get_key.side_effect = lambda file, key: {
             "JIRA_SITE_URL": "https://dummy-jira-url.com",
-            "JIRA_SERVER": "true"
+            "JIRA_SERVER": "true",
         }.get(key)
         mock_get_results.return_value = 42
 
@@ -185,7 +228,7 @@ class TestJiraIssueTracker(unittest.TestCase):
 
         mock_get_key.side_effect = lambda file, key: {
             "JIRA_SITE_URL": "https://dummy-jira-url.com",
-            "JIRA_SERVER": "true"
+            "JIRA_SERVER": "true",
         }.get(key)
         mock_get_results.side_effect = RequestException("401 Unauthorized")
 
@@ -212,7 +255,7 @@ class TestJiraIssueTracker(unittest.TestCase):
 
         mock_get_key.side_effect = lambda file, key: {
             "JIRA_SITE_URL": "https://dummy-jira-url.com",
-            "JIRA_SERVER": "true"
+            "JIRA_SERVER": "true",
         }.get(key)
         mock_get_results.side_effect = RequestException("403 Forbidden")
 
@@ -236,7 +279,7 @@ class TestJiraIssueTracker(unittest.TestCase):
 
         mock_get_key.side_effect = lambda file, key: {
             "JIRA_SITE_URL": "https://dummy-jira-url.com",
-            "JIRA_SERVER": "true"
+            "JIRA_SERVER": "true",
         }.get(key)
         mock_get_results.side_effect = RequestException("404 Not Found")
 
@@ -260,7 +303,7 @@ class TestJiraIssueTracker(unittest.TestCase):
 
         mock_get_key.side_effect = lambda file, key: {
             "JIRA_SITE_URL": "https://dummy-jira-url.com",
-            "JIRA_SERVER": "true"
+            "JIRA_SERVER": "true",
         }.get(key)
         mock_get_results.side_effect = RequestException("Timeout occurred")
 
@@ -320,7 +363,10 @@ class TestJiraIssueTracker(unittest.TestCase):
                 error_msg = mock_box.update_label_error.call_args[0][0]
                 self.assertIn("Connection Error", error_msg)
 
-    @patch("jira_tracker.jira_issue_tracker.get_key", return_value="https://dummy-jira-url.com")
+    @patch(
+        "jira_tracker.jira_issue_tracker.get_key",
+        return_value="https://dummy-jira-url.com",
+    )
     def test_create_user_settings_button(self, mock_get_key):
         """Test create_user_settings_button (deprecated method)"""
         with patch.object(JiraIssueTracker, "setup_ui"):
@@ -350,14 +396,19 @@ class TestJiraIssueTracker(unittest.TestCase):
                     self.assertEqual(mock_app.theme_cls.theme_style, "Light")
                     mock_box.update_ui_colors.assert_called_once_with("Light")
 
-    @patch("jira_tracker.jira_issue_tracker.get_key", return_value="https://dummy-jira-url.com")
+    @patch(
+        "jira_tracker.jira_issue_tracker.get_key",
+        return_value="https://dummy-jira-url.com",
+    )
     def test_initialization_sets_jira_base_url(self, mock_get_key):
         """Test that initialization properly sets jira_base_url"""
         with patch.object(JiraIssueTracker, "setup_ui"):
             with patch.object(JiraIssueTracker, "add_widget"):
                 tracker = JiraIssueTracker()
                 self.assertEqual(tracker.jira_site_url, "https://dummy-jira-url.com")
-                self.assertEqual(tracker.jira_base_url, "https://dummy-jira-url.com/issues/")
+                self.assertEqual(
+                    tracker.jira_base_url, "https://dummy-jira-url.com/issues/"
+                )
 
     @patch("jira_tracker.jira_issue_tracker.get_key")
     def test_initialization_dark_mode_default(self, mock_get_key):
@@ -381,7 +432,10 @@ class TestJiraIssueTracker(unittest.TestCase):
                 self.assertIn("Default", tracker.theme_names)
                 self.assertIn("Ocean", tracker.theme_names)
 
-    @patch("jira_tracker.jira_issue_tracker.get_key", return_value="https://dummy-jira-url.com")
+    @patch(
+        "jira_tracker.jira_issue_tracker.get_key",
+        return_value="https://dummy-jira-url.com",
+    )
     def test_toggle_mode_from_light_to_dark(self, mock_get_key):
         """Test toggling from Light to Dark mode"""
         with patch.object(JiraIssueTracker, "setup_ui"):

@@ -125,6 +125,7 @@ class TestEnvValidator(unittest.TestCase):
     def test_required_env_vars_constant(self):
         """Test that REQUIRED_ENV_VARS constant is defined"""
         from jira_tracker.env_validator import REQUIRED_ENV_VARS
+
         self.assertIsInstance(REQUIRED_ENV_VARS, list)
         self.assertIn("JIRA_SITE_URL", REQUIRED_ENV_VARS)
         self.assertIn("JIRA_API_TOKEN", REQUIRED_ENV_VARS)
@@ -132,6 +133,7 @@ class TestEnvValidator(unittest.TestCase):
     def test_optional_env_vars_constant(self):
         """Test that OPTIONAL_ENV_VARS constant is defined"""
         from jira_tracker.env_validator import OPTIONAL_ENV_VARS
+
         self.assertIsInstance(OPTIONAL_ENV_VARS, list)
         self.assertIn("JIRA_EMAIL", OPTIONAL_ENV_VARS)
 

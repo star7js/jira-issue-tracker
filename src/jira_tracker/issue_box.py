@@ -202,16 +202,17 @@ class IssueBox(MDCard):
         self.create_loading_spinner()
         self.add_tooltips()
 
-        # Enable hover detection
-        from kivy.core.window import Window
+        # Enable hover detection (skip in CI environment)
+        if os.environ.get("CI") != "true":
+            from kivy.core.window import Window
 
-        Window.bind(mouse_pos=self.on_mouse_pos)
+            Window.bind(mouse_pos=self.on_mouse_pos)
 
-        # Fade in animation on load
-        self.opacity = 0
-        from kivy.animation import Animation
+            # Fade in animation on load
+            self.opacity = 0
+            from kivy.animation import Animation
 
-        Animation(opacity=1, duration=0.4).start(self)
+            Animation(opacity=1, duration=0.4).start(self)
 
     def add_tooltips(self):
         """Add tooltips to explain functionality."""
@@ -340,6 +341,11 @@ class IssueBox(MDCard):
 
     def animate_count(self, start, end):
         """Animate counting up from start to end."""
+        if os.environ.get("CI") == "true":
+            # In CI, skip animation and just set the text
+            self.issue_label.text = str(end)
+            return
+
         from kivy.clock import Clock
 
         duration = 0.5  # Animation duration in seconds
@@ -375,6 +381,9 @@ class IssueBox(MDCard):
 
     def on_mouse_pos(self, window, pos):
         """Track mouse position for hover effects."""
+        if os.environ.get("CI") == "true":
+            return
+
         if not self.get_root_window():
             return
 
@@ -394,6 +403,9 @@ class IssueBox(MDCard):
 
     def on_hover_enter(self):
         """Add glow effect on hover with elevation animation."""
+        if os.environ.get("CI") == "true":
+            return
+
         from kivy.animation import Animation
 
         # Increase elevation for glow effect
@@ -401,6 +413,9 @@ class IssueBox(MDCard):
 
     def on_hover_leave(self):
         """Remove glow effect when not hovering."""
+        if os.environ.get("CI") == "true":
+            return
+
         from kivy.animation import Animation
 
         # Return to normal elevation

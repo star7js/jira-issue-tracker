@@ -224,7 +224,9 @@ class TestJiraAPIProgram(unittest.TestCase):
         """Test that default constants are properly defined"""
         self.assertEqual(api.DEFAULT_API_REQUEST_INTERVAL, 3600)
         self.assertEqual(api.DEFAULT_REQUEST_TIMEOUT, 10)
-        self.assertEqual(api.JIRA_API_ENDPOINT_CLOUD, "/rest/api/3/search/approximate-count")
+        self.assertEqual(
+            api.JIRA_API_ENDPOINT_CLOUD, "/rest/api/3/search/approximate-count"
+        )
         self.assertEqual(api.JIRA_API_ENDPOINT_SERVER, "/rest/api/2/search")
 
     def test_jira_global_constants_exist(self):

@@ -9,6 +9,7 @@ class TestLoggingConfig(unittest.TestCase):
     def setUp(self):
         """Reset logging configured flag before each test"""
         import jira_tracker.logging_config
+
         jira_tracker.logging_config._logging_configured = False
 
     def test_setup_logging_configures_logger(self):

@@ -29,7 +29,9 @@ class TestSafeRequests(unittest.TestCase):
     def test_safe_requests_get_request_exception(self, mock_logger):
         """Test that RequestException is re-raised after logging"""
         with patch.object(self.safe_requests.session, "get") as mock_get:
-            mock_get.side_effect = requests.exceptions.ConnectionError("Connection failed")
+            mock_get.side_effect = requests.exceptions.ConnectionError(
+                "Connection failed"
+            )
             with self.assertRaises(requests.exceptions.ConnectionError):
                 self.safe_requests.get("https://example.com")
             mock_logger.error.assert_called_once()
@@ -48,8 +50,12 @@ class TestSafeRequests(unittest.TestCase):
     def test_safe_requests_post_success(self):
         """Test successful POST request"""
         with patch.object(self.safe_requests.session, "post") as mock_post:
-            mock_post.return_value = MagicMock(status_code=200, json=lambda: {"result": "success"})
-            response = self.safe_requests.post("https://example.com", json={"key": "value"})
+            mock_post.return_value = MagicMock(
+                status_code=200, json=lambda: {"result": "success"}
+            )
+            response = self.safe_requests.post(
+                "https://example.com", json={"key": "value"}
+            )
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.json(), {"result": "success"})
 
@@ -108,11 +114,17 @@ class TestSafeRequests(unittest.TestCase):
     def test_default_request_timeout_constant(self):
         """Test that default timeout constant is defined"""
         from jira_tracker.security import DEFAULT_REQUEST_TIMEOUT
+
         self.assertEqual(DEFAULT_REQUEST_TIMEOUT, 10)
 
     def test_retry_constants(self):
         """Test that retry constants are properly defined"""
-        from jira_tracker.security import RETRY_TOTAL, RETRY_BACKOFF_FACTOR, RETRY_STATUS_CODES
+        from jira_tracker.security import (
+            RETRY_TOTAL,
+            RETRY_BACKOFF_FACTOR,
+            RETRY_STATUS_CODES,
+        )
+
         self.assertEqual(RETRY_TOTAL, 3)
         self.assertEqual(RETRY_BACKOFF_FACTOR, 1)
         self.assertEqual(RETRY_STATUS_CODES, [429, 500, 502, 503, 504])
@@ -129,7 +141,9 @@ class TestSafeRequests(unittest.TestCase):
         """Test GET request with params"""
         with patch.object(self.safe_requests.session, "get") as mock_get:
             mock_get.return_value = MagicMock(status_code=200)
-            response = self.safe_requests.get("https://example.com", params={"key": "value"})
+            response = self.safe_requests.get(
+                "https://example.com", params={"key": "value"}
+            )
             self.assertEqual(response.status_code, 200)
             call_kwargs = mock_get.call_args[1]
             self.assertEqual(call_kwargs["params"], {"key": "value"})

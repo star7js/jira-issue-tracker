@@ -105,14 +105,25 @@ class TestIssueBoxUnit(unittest.TestCase):
         # Set CI environment variable
         os.environ["CI"] = "true"
 
-        # Reload the module to trigger CI path
-        import importlib
-        import jira_tracker.issue_box
-        importlib.reload(jira_tracker.issue_box)
+        try:
+            # Reload the module to trigger CI path
+            import importlib
+            import jira_tracker.issue_box
 
-        # Clean up
-        del os.environ["CI"]
-        importlib.reload(jira_tracker.issue_box)
+            importlib.reload(jira_tracker.issue_box)
+
+            # Verify that basic module constants still work in CI mode
+            self.assertIsNotNone(jira_tracker.issue_box.THEMES)
+            self.assertIsInstance(jira_tracker.issue_box.THEMES, dict)
+
+        finally:
+            # Clean up
+            if "CI" in os.environ:
+                del os.environ["CI"]
+            import importlib
+            import jira_tracker.issue_box
+
+            importlib.reload(jira_tracker.issue_box)
 
     def test_theme_colors_are_tuples_or_lists(self):
         """Test that all theme colors are tuples or lists"""
